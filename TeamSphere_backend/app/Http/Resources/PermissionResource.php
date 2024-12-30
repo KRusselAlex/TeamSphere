@@ -22,8 +22,13 @@ class PermissionResource extends JsonResource
             'start_date' => $this->start_date,
             'end_date' =>  $this->end_date,
             'reason' => $this->reason,
-            'justification'=> $this->justification ? Storage::url($this->justification) : null,
-            'status' => $this->status ? $this->status : "pending"
+            'justification' => $this->justification ? Storage::url($this->justification) : null,
+            'admin_id'=>$this->admin_id,
+            'status' => $this->status ? $this->status : "pending",
+            'username' =>$this->username,
+            'fullname' => $this->fullname,
+            'requested_at' => $this->created_at,
+            'approved_at' => $this->updated_at == $this->created_at ? null : $this->updated_at
         ];
     }
 }

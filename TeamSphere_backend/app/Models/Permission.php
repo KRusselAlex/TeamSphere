@@ -17,6 +17,7 @@ class Permission extends Model
         'start_date',
         'end_date',
         'reason',
+        'admin_id',
         'justification',
         'status'
     ];
@@ -26,7 +27,11 @@ class Permission extends Model
         return $this->belongsTo(User::class);
     }
 
-    // If you want to access the user directly from a presence
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
+    }
+
     public function getUserNameAttribute()
     {
         return $this->user->name ?? 'No user';

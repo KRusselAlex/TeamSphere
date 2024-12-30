@@ -62,7 +62,7 @@ class NotificationController extends Controller
                 return response()->json([
                     'success' => true,
                     'data' => [
-                        "Notification" => new NotificationResource($notification)
+                        "notification" => new NotificationResource($notification)
                     ],
                     'message' => "Notification retrieved successfully",
                     'errors' => null
@@ -94,19 +94,21 @@ class NotificationController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'user_id' => 'required|integer|exists:users,id',
+                'message' => 'required|string'
             ]);
 
             if ($validator->fails()) {
 
                 return response()->json([
                     'success' => false,
-                    'message' => 'Missing required parameters',
+                    'message' => 'Bad parameters',
                     'errors' => $validator->messages(),
                 ], 400);
             }
 
             $notification = Notification::create([
                 'user_id' => $request->user_id,
+                'message' => $request->message
             ]);
 
             return response()->json([
@@ -139,7 +141,7 @@ class NotificationController extends Controller
 
             if ($notification) {
                 $validator = Validator::make($request->all(), [
-                    'status' => 'required|boolean',
+                     'message' => 'required|string'
                 ]);
 
                 if ($validator->fails()) {
@@ -151,12 +153,12 @@ class NotificationController extends Controller
                     ], 400);
                 }
 
-                $notification->update(['status' => $request->status]);
+                $notification->update([ 'message' => $request->message]);
                 return response()->json([
 
                     'success' => true,
                     'data' => [
-                        "Notification" => $notification
+                        "notification" => $notification
                     ],
                     "message" => "updated successfully",
                     'errors' => null

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\PresenceController;
 use App\Http\Controllers\Api\UserController;
@@ -13,7 +14,7 @@ Route::prefix('v1')->group(function () {
         Route::get('presences/search/{search}', 'search_presences');
     });
 
-    Route::apiResource('notifications', PresenceController::class);
+    Route::apiResource('notifications', NotificationController::class);
     Route::apiResource('permissions', PermissionController::class);
     Route::controller(PermissionController::class)->group(function () {
         Route::get('permission/search/{search}', 'search_permissions');

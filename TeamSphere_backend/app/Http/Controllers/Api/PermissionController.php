@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\NotificationResource;
 use Illuminate\Http\Request;
 use App\Http\Resources\PermissionResource;
+// use App\Models\Notification;
+use Illuminate\Support\Facades\Notification;
 use App\Models\Permission;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\PermissionNotification;
 use Exception;
 
 class PermissionController extends Controller
@@ -100,6 +104,8 @@ class PermissionController extends Controller
                 'justification' => 'file|mimes:pdf,jpg,jpeg,png',
             ]);
 
+
+
             if ($validator->fails()) {
 
                 return response()->json([
@@ -114,7 +120,6 @@ class PermissionController extends Controller
 
                 $justificationPath = $request->file('justification')->store('justifications', 'public');
             }
-
 
             $permission = Permission::create([
                 'user_id' => $request->user_id,
@@ -151,11 +156,13 @@ class PermissionController extends Controller
     {
 
         try {
-            $permission = Permission::find($id);
+            $permission = Permission::with('user')->with('admin')->find($id);
 
             if ($permission) {
                 $validator = Validator::make($request->all(), [
                     'status' => 'required|string',
+                    'admin_id' => 'required|exists:users,id',
+
                 ]);
 
                 if ($validator->fails()) {
@@ -167,14 +174,34 @@ class PermissionController extends Controller
                     ], 400);
                 }
 
-                $permission->update(["status" => $request->status]);
+                $permission_ok = $permission->update([
+                    "status" => $request->status,
+                    "admin_id" => $request->admin_id
+                ]);
+
+                if($permission_ok){
+                    Notification::route('mail', $permission->user->email)->notify(
+                        new PermissionNotification($permission->status, $permission->permission_type,$permission->user->fullname ,$permission->admin->fullname)
+                    );
+
+                }
+
+
+                //  if($permission_ok){
+                //     $notification = Notification::create([
+                //         'user_id' => $permission->user_id,
+                //         'message' => "alex on refuse"
+                //     ]);
+                //  }
+
                 return response()->json([
 
                     'success' => true,
                     'data' => [
-                        "permission" => $permission
+                        "permission" => $permission,
+                        // 'notifiaction'=> new NotificationResource($notification)
                     ],
-                    "message" => "updated successfully",
+                    "message" => "Permission request updated and notification sent",
                     'errors' => null
 
                 ], 200);

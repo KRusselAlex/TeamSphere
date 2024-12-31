@@ -59,9 +59,18 @@ Copy the example environment file and configure it for your local environment:
 cp .env.example .env
 ```
 
-Update the `.env` file with your database credentials, mail configuration, and other settings.
+Update the `.env` file with your database credentials, mail configuration, application key and other settings .
 
-#### Configure Database (MySQL)
+### Generate Application Key
+
+```bash
+php artisan key:generate
+```
+```env
+APP_KEY=
+```
+
+### Configure Database (MySQL)
 
 In the `.env` file, configure the database connection settings as follows:
 
@@ -175,7 +184,7 @@ Here are the key API endpoints for TeamSphere:
 - **DELETE** `/api/v1/users/{id}`  
   Delete a user (admin).
 
-## Notifications for Permission Requests
+##  Notifications for Permission Requests
 
 When a permission request is granted or denied, the system will automatically send a **notification** to the employee via the Laravel notification system. Modify the `PermissionNotification.php` to customize your notification email.
 

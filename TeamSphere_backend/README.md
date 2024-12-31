@@ -1,4 +1,5 @@
 
+
 # TeamSphere - Backend API
 
 **French**: Gestion de présence et de permissions des employés  
@@ -8,7 +9,7 @@ This is the backend API for the **TeamSphere** project, a system for managing em
 
 ## Features
 
-- **User Authentication**: Login, registration, Email veriifcation and authentication via API tokens using Laravel Sanctum.
+- **User Authentication**: Login, registration, email verification, and authentication via API tokens using Laravel Sanctum.
 - **Attendance Management**: Employees can log their attendance, and administrators can view attendance records.
 - **Permission Management**: Employees can request time off, which can be reviewed and approved by managers.
 - **Role-based Access Control**: Different roles (admin, employee) with different levels of access.
@@ -56,7 +57,26 @@ Copy the example environment file and configure it for your local environment:
 cp .env.example .env
 ```
 
-Update the `.env` file with your database credentials and other settings (e.g., app name, mail configuration, etc.).
+Update the `.env` file with your database credentials, mail configuration, and other settings.
+
+#### Configure Database (MySQL)
+
+In the `.env` file, configure the database connection settings as follows:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=teamsphere
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+- `DB_HOST`: The host where your MySQL server is running (e.g., `127.0.0.1` for local).
+- `DB_PORT`: The port your MySQL server is listening on (default is `3306`).
+- `DB_DATABASE`: The name of the database for your application (e.g., `teamsphere`).
+- `DB_USERNAME`: The username for the database connection (e.g., `root`).
+- `DB_PASSWORD`: The password for the database connection (if applicable).
 
 ### 4. Migrate the Database
 
@@ -92,130 +112,72 @@ Here are the key API endpoints for TeamSphere:
 
 ### Authentication
 
-- **POST** `/api/auth/login`  
+- **POST** `/api/v1/auth/login`  
   User login, returns an API token.
 
-- **POST** `/api/auth/register`  
+- **POST** `/api/v1/auth/register`  
   User registration (admin only).
 
-- **POST** `/api/auth/logout`  
+- **POST** `/api/v1/auth/logout`  
   Log the user out by invalidating the API token.
 
-- **POST** `/api/auth/forgot-password`  
-   Ask for an email to change your password.
+- **POST** `/api/v1/auth/forgot-password`  
+  Request an email to change your password.
 
-- **POST** `/api/auth/reset-password`  
-   User change  password.
+- **POST** `/api/v1/auth/reset-password`  
+  User changes their password.
 
 ### Presence
 
-- **POST** `/api/presence`  
+- **POST** `/api/v1/presence`  
   Employees log their attendance.
 
-- **GET** `/api/presence`  
+- **GET** `/api/v1/presence`  
   Retrieve all attendance records.
 
-- **GET** `/api/presence/{id}`  
+- **GET** `/api/v1/presence/{id}`  
   Retrieve a specific attendance record.
 
-- **PUT** `/api/presence/{id}`  
+- **PUT** `/api/v1/presence/{id}`  
   Update a specific attendance record.
 
-- **DELETE** `/api/presence/{id}`  
+- **DELETE** `/api/v1/presence/{id}`  
   Delete a specific attendance record.
 
 ### Permissions
 
-- **POST** `/api/permissions`  
+- **POST** `/api/v1/permissions`  
   Request a permission (time off).
 
-- **GET** `/api/permissions`  
+- **GET** `/api/v1/permissions`  
   Retrieve all permission requests.
 
-- **GET** `/api/permissions/{id}`  
+- **GET** `/api/v1/permissions/{id}`  
   Retrieve details of a specific permission request.
 
-- **PUT** `/api/permissions/{id}`  
+- **PUT** `/api/v1/permissions/{id}`  
   Approve or reject a permission request (admin).  
   **Note:** Notifications are automatically sent to the employee when their permission request is granted or denied.
 
 ### Users
 
-- **GET** `/api/users`  
+- **GET** `/api/v1/users`  
   Get a list of all users (admin only).
 
-- **GET** `/api/users/{id}`  
+- **GET** `/api/v1/users/{id}`  
   Get details of a specific user.
 
-- **PUT** `/api/users/{id}`  
+- **PUT** `/api/v1/users/{id}`  
   Update a user’s profile (admin/manager).
 
-- **DELETE** `/api/users/{id}`  
+- **DELETE** `/api/v1/users/{id}`  
   Delete a user (admin).
 
 ## Notifications for Permission Requests
 
-When a permission request is granted or denied, the system will automatically send a **notification** to the employee via the Laravel notification system.Modify the PermissionNotification.php to customise your notification email.
-
-
+When a permission request is granted or denied, the system will automatically send a **notification** to the employee via the Laravel notification system. Modify the `PermissionNotification.php` to customize your notification email.
 
 ```php
-
-namespace App\Notifications;
-
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
-
-class PermissionNotification extends Notification
-{
-    use Queueable;
-    protected $status;
-    protected $permission_type;
-    protected $employee_name;
-    protected $admin_name;
-
-
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct($status, $permission_type, $employee_name, $admin_name)
-    {
-        switch ($permission_type) {
-            case 'sick':
-                $this->permission_type = 'maladie';
-                break;
-            case 'vacation':
-                $this->permission_type = 'voyage';
-                break;
-            default:
-                $this->permission_type = 'personnelle';
-                break;
-        }
-
-
-        switch ($status) {
-            case 'approved':
-                $this->status = 'approuvé';
-                break;
-            default:
-                $this->status = 'rejeté';
-                break;
-        }
-        $this->employee_name = $employee_name;
-        $this->admin_name = $admin_name;
-    }
-
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
-    public function via(object $notifiable): array
-    {
-        return ['mail'];
-    }
 
     /**
      * Get the mail representation of the notification.
@@ -231,22 +193,31 @@ class PermissionNotification extends Notification
             ->line($this->admin_name);
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            'employee_name' => $this->employee_name,
-            'status' => $this->status,
-            'permission_type' => $this->permission_type,
-        ];
-    }
-}
 
 ```
+
+## Mailing Configuration
+
+To enable mailing functionality for notifications (such as for permission requests), follow these steps to configure the mail driver:
+
+### 1. Configure the `.env` file
+
+You need to configure the mail driver in the `.env` file. For example, to use **Mailgun** as the mail driver, update the `.env` file with the following:
+
+```bash
+MAIL_MAILER=smtp
+MAIL_SCHEME=null
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_FROM_ADDRESS=
+MAIL_FROM_NAME="Teamshpere Admin"
+
+```
+
+
+
 
 ## Contributing
 
@@ -267,3 +238,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Laravel for the powerful backend framework.
 - Laravel Notifications for real-time notifications.
 - All contributors to this open-source project.
+

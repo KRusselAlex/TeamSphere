@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->text('reason');
+            $table->boolean('notification_sent')->default(false);
             $table->foreignId('admin_id')
                 ->nullable()
                 ->constrained('users')

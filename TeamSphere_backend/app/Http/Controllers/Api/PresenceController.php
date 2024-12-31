@@ -62,7 +62,7 @@ class PresenceController extends Controller
                 return response()->json([
                     'success' => true,
                     'data' => [
-                        "presence" => new PresenceResource($presence)
+                        "presence" => $presence
                     ],
                     'message' => "Presence retrieved successfully",
                     'errors' => null

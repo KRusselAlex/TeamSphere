@@ -9,6 +9,7 @@ use App\Http\Resources\PermissionResource;
 // use App\Models\Notification;
 use Illuminate\Support\Facades\Notification;
 use App\Models\Permission;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Notifications\PermissionNotification;
@@ -65,7 +66,7 @@ class PermissionController extends Controller
                 return response()->json([
                     'success' => true,
                     'data' => [
-                        "permission" => new PermissionResource($permission)
+                        "permission" => $permission
                     ],
                     'message' => "Permission retrieved successfully",
                     'errors' => null
@@ -134,7 +135,7 @@ class PermissionController extends Controller
 
                 'success' => true,
                 'data' => [
-                    "permission" => new PermissionResource($permission)
+                    "permission" => $permission
                 ],
                 'message' => "Permission created successfully",
                 'errors' => null
@@ -156,7 +157,8 @@ class PermissionController extends Controller
     {
 
         try {
-            $permission = Permission::with('user')->with('admin')->find($id);
+            $permission = Permission::with('user')->find($id);
+
 
             if ($permission) {
                 $validator = Validator::make($request->all(), [
@@ -165,6 +167,7 @@ class PermissionController extends Controller
 
                 ]);
 
+                $admin = User::find($request->admin_id);
                 if ($validator->fails()) {
 
                     return response()->json([
@@ -176,14 +179,14 @@ class PermissionController extends Controller
 
                 $permission_ok = $permission->update([
                     "status" => $request->status,
-                    "admin_id" => $request->admin_id
+                    "admin_id" => $request->admin_id,
+                    "notification_sent" => true
                 ]);
 
-                if($permission_ok){
+                if ($permission_ok) {
                     Notification::route('mail', $permission->user->email)->notify(
-                        new PermissionNotification($permission->status, $permission->permission_type,$permission->user->fullname ,$permission->admin->fullname)
+                        new PermissionNotification($permission->status, $permission->permission_type, $permission->user->fullname, $admin->fullname)
                     );
-
                 }
 
 

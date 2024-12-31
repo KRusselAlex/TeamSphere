@@ -27,8 +27,9 @@ class PermissionResource extends JsonResource
             'status' => $this->status ? $this->status : "pending",
             'username' =>$this->username,
             'fullname' => $this->fullname,
+            'notification_sent'=> $this->notification_sent,
             'requested_at' => $this->created_at,
-            'approved_at' => $this->updated_at == $this->created_at ? null : $this->updated_at
+            'responded_at' => $this->updated_at == $this->created_at ? null : $this->updated_at
         ];
     }
 }

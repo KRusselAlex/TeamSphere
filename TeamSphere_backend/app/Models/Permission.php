@@ -19,7 +19,8 @@ class Permission extends Model
         'reason',
         'admin_id',
         'justification',
-        'status'
+        'status',
+        'notification_sent'
     ];
 
     public function user()

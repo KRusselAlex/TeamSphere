@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->middleware('auth:sanctum','verified')->group(function () {
     Route::apiResource('presences', PresenceController::class);
     Route::controller(PresenceController::class)->group(function () {
         Route::get('presences/search/{search}', 'search_presences');
@@ -34,3 +34,5 @@ Route::prefix('v1')->group(function () {
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+require __DIR__.'/auth.php';

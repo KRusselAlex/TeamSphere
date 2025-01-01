@@ -6,10 +6,8 @@ import DashboardTemplate from '@/components/DashboardTemplate.vue';
 
 <template>
 
-  <DashboardTemplate>
+   <DashboardTemplate>
     szdhdjas
-
-
-
-  </DashboardTemplate>
+alex
+   </DashboardTemplate>
 </template>

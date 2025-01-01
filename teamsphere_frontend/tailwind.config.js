@@ -18,7 +18,8 @@ export default {
         secondryColor: "#ffffff",
         thirdColor: "#343434",
         pink: colors.fuchsia,
-        borderColor: "#d1d5db"
+        borderColor: "#d1d5db",
+        sideColor:"#f4f5fb"
       },
       borderRadius: {
         'buttonRadius': '10px',

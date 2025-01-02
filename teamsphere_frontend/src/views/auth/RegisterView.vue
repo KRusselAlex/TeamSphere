@@ -113,7 +113,7 @@ const submitForm = async () => {
     console.log('Formulaire soumis avec succès');
     const response = await registerUser(data);
 
-    if (response.status < 300) {
+    if (response.succces) {
       router.push(
         "/auth/login"
       )

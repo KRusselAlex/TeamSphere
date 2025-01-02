@@ -16,9 +16,6 @@ const profileData = ref({
   profileImage: null as File | null,
 });
 
-const errors = ref<{ [key: string]: string }>({});
-
-
 const handleFileUpload = (e: Event) => {
   const fileReader = new FileReader();
   const input = e.target as HTMLInputElement;
@@ -47,7 +44,7 @@ const handleSubmit = () => {
 
 
   toast.success('Profil mis à jour avec succès!');
-  console.log('Données du profil:', profileData.value);
+
 };
 
 </script>

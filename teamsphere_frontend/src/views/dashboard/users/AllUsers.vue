@@ -3,21 +3,25 @@ import DashboardTemplate from '@/components/DashboardTemplate.vue';
 import CardDash from '@/components/CardDash.vue';
 import DataTableUsers from '@/components/Users/DataTableUsers.vue';
 // import { ref } from 'vue';
+import { useUserStore } from '@/stores/userStore';
 
 import { Bar } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 
-// Enregistrement des composants Chart.js nécessaires
+const userStore = useUserStore();
+
+
+
+
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
-// Données pour le graphique (nombre d'utilisateurs par département)
 const chartData = {
   labels: ['Informatique', 'Ressources Humaines', 'Marketing', 'Finance', 'Administration'],
   datasets: [
     {
       label: 'Nombre d\'utilisateurs',
-      data: [12, 7, 15, 9, 5], // Exemple de données (à adapter selon vos utilisateurs)
-      backgroundColor: '#4CAF50', // Couleur des barres
+      data: [12, 7, 15, 9, 5],
+      backgroundColor: '#4CAF50',
       borderColor: '#388E3C',
       borderWidth: 1
     }
@@ -52,40 +56,75 @@ const chartOptions = {
     <div class="flex flex-col gap-2 py-4">
       <div class="grid md:grid-cols-2 gap-3 ">
         <div class="p-4 rounded-lg bg-white border ">
-        
+
           <Bar :data="chartData" :options="chartOptions" />
         </div>
         <div class="grid md:grid-cols-2 gap-3">
-          <CardDash title="Nombre total" size="9">
-            <svg fill="currentColor" width="40px" height="40px" viewBox="0 0 16 16" id="request-sent-16px">
-              <path id="Path_50" data-name="Path 50"
-                d="M-11.5,0h-11A2.5,2.5,0,0,0-25,2.5v8A2.5,2.5,0,0,0-22.5,13h.5v2.5a.5.5,0,0,0,.309.462A.489.489,0,0,0-21.5,16a.5.5,0,0,0,.354-.146L-18.293,13H-11.5A2.5,2.5,0,0,0-9,10.5v-8A2.5,2.5,0,0,0-11.5,0ZM-10,10.5A1.5,1.5,0,0,1-11.5,12h-7a.5.5,0,0,0-.354.146L-21,14.293V12.5a.5.5,0,0,0-.5-.5h-1A1.5,1.5,0,0,1-24,10.5v-8A1.5,1.5,0,0,1-22.5,1h11A1.5,1.5,0,0,1-10,2.5Zm-2.038-3.809a.518.518,0,0,1-.109.163l-2,2A.5.5,0,0,1-14.5,9a.5.5,0,0,1-.354-.146.5.5,0,0,1,0-.708L-13.707,7H-18.5A1.5,1.5,0,0,0-20,8.5a.5.5,0,0,1-.5.5.5.5,0,0,1-.5-.5A2.5,2.5,0,0,1-18.5,6h4.793l-1.147-1.146a.5.5,0,0,1,0-.708.5.5,0,0,1,.708,0l2,2a.518.518,0,0,1,.109.163A.505.505,0,0,1-12.038,6.691Z"
-                transform="translate(25)" />
+          <CardDash title="Nombre total" :size="userStore.users.length">
+            <svg width="60px" height="60px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5" />
+              <path d="M18 9C19.6569 9 21 7.88071 21 6.5C21 5.11929 19.6569 4 18 4" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" />
+              <path d="M6 9C4.34315 9 3 7.88071 3 6.5C3 5.11929 4.34315 4 6 4" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" />
+              <path
+                d="M17.1973 15C17.7078 15.5883 18 16.2714 18 17C18 19.2091 15.3137 21 12 21C8.68629 21 6 19.2091 6 17C6 14.7909 8.68629 13 12 13C12.3407 13 12.6748 13.0189 13 13.0553"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              <path d="M20 19C21.7542 18.6153 23 17.6411 23 16.5C23 15.3589 21.7542 14.3847 20 14" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" />
+              <path d="M4 19C2.24575 18.6153 1 17.6411 1 16.5C1 15.3589 2.24575 14.3847 4 14" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" />
             </svg>
           </CardDash>
-          <CardDash title="Nombre total" size="9">
-            <svg fill="currentColor" width="40px" height="40px" viewBox="0 0 16 16" id="request-sent-16px">
-              <path id="Path_50" data-name="Path 50"
-                d="M-11.5,0h-11A2.5,2.5,0,0,0-25,2.5v8A2.5,2.5,0,0,0-22.5,13h.5v2.5a.5.5,0,0,0,.309.462A.489.489,0,0,0-21.5,16a.5.5,0,0,0,.354-.146L-18.293,13H-11.5A2.5,2.5,0,0,0-9,10.5v-8A2.5,2.5,0,0,0-11.5,0ZM-10,10.5A1.5,1.5,0,0,1-11.5,12h-7a.5.5,0,0,0-.354.146L-21,14.293V12.5a.5.5,0,0,0-.5-.5h-1A1.5,1.5,0,0,1-24,10.5v-8A1.5,1.5,0,0,1-22.5,1h11A1.5,1.5,0,0,1-10,2.5Zm-2.038-3.809a.518.518,0,0,1-.109.163l-2,2A.5.5,0,0,1-14.5,9a.5.5,0,0,1-.354-.146.5.5,0,0,1,0-.708L-13.707,7H-18.5A1.5,1.5,0,0,0-20,8.5a.5.5,0,0,1-.5.5.5.5,0,0,1-.5-.5A2.5,2.5,0,0,1-18.5,6h4.793l-1.147-1.146a.5.5,0,0,1,0-.708.5.5,0,0,1,.708,0l2,2a.518.518,0,0,1,.109.163A.505.505,0,0,1-12.038,6.691Z"
-                transform="translate(25)" />
+          <CardDash title="Nombre total" :size="userStore.users.length">
+            <svg width="60px" height="60px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5" />
+              <path d="M18 9C19.6569 9 21 7.88071 21 6.5C21 5.11929 19.6569 4 18 4" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" />
+              <path d="M6 9C4.34315 9 3 7.88071 3 6.5C3 5.11929 4.34315 4 6 4" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" />
+              <path
+                d="M17.1973 15C17.7078 15.5883 18 16.2714 18 17C18 19.2091 15.3137 21 12 21C8.68629 21 6 19.2091 6 17C6 14.7909 8.68629 13 12 13C12.3407 13 12.6748 13.0189 13 13.0553"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              <path d="M20 19C21.7542 18.6153 23 17.6411 23 16.5C23 15.3589 21.7542 14.3847 20 14" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" />
+              <path d="M4 19C2.24575 18.6153 1 17.6411 1 16.5C1 15.3589 2.24575 14.3847 4 14" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" />
             </svg>
           </CardDash>
-          <CardDash title="Nombre total" size="9">
-            <svg fill="currentColor" width="40px" height="40px" viewBox="0 0 16 16" id="request-sent-16px">
-              <path id="Path_50" data-name="Path 50"
-                d="M-11.5,0h-11A2.5,2.5,0,0,0-25,2.5v8A2.5,2.5,0,0,0-22.5,13h.5v2.5a.5.5,0,0,0,.309.462A.489.489,0,0,0-21.5,16a.5.5,0,0,0,.354-.146L-18.293,13H-11.5A2.5,2.5,0,0,0-9,10.5v-8A2.5,2.5,0,0,0-11.5,0ZM-10,10.5A1.5,1.5,0,0,1-11.5,12h-7a.5.5,0,0,0-.354.146L-21,14.293V12.5a.5.5,0,0,0-.5-.5h-1A1.5,1.5,0,0,1-24,10.5v-8A1.5,1.5,0,0,1-22.5,1h11A1.5,1.5,0,0,1-10,2.5Zm-2.038-3.809a.518.518,0,0,1-.109.163l-2,2A.5.5,0,0,1-14.5,9a.5.5,0,0,1-.354-.146.5.5,0,0,1,0-.708L-13.707,7H-18.5A1.5,1.5,0,0,0-20,8.5a.5.5,0,0,1-.5.5.5.5,0,0,1-.5-.5A2.5,2.5,0,0,1-18.5,6h4.793l-1.147-1.146a.5.5,0,0,1,0-.708.5.5,0,0,1,.708,0l2,2a.518.518,0,0,1,.109.163A.505.505,0,0,1-12.038,6.691Z"
-                transform="translate(25)" />
+          <CardDash title="Nombre total" :size="userStore.users.length">
+            <svg width="60px" height="60px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5" />
+              <path d="M18 9C19.6569 9 21 7.88071 21 6.5C21 5.11929 19.6569 4 18 4" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" />
+              <path d="M6 9C4.34315 9 3 7.88071 3 6.5C3 5.11929 4.34315 4 6 4" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" />
+              <path
+                d="M17.1973 15C17.7078 15.5883 18 16.2714 18 17C18 19.2091 15.3137 21 12 21C8.68629 21 6 19.2091 6 17C6 14.7909 8.68629 13 12 13C12.3407 13 12.6748 13.0189 13 13.0553"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              <path d="M20 19C21.7542 18.6153 23 17.6411 23 16.5C23 15.3589 21.7542 14.3847 20 14" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" />
+              <path d="M4 19C2.24575 18.6153 1 17.6411 1 16.5C1 15.3589 2.24575 14.3847 4 14" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" />
             </svg>
           </CardDash>
 
-          <CardDash title="Nombre total" size="9">
-            <svg fill="currentColor" width="40px" height="40px" viewBox="0 0 16 16" id="request-sent-16px">
-              <path id="Path_50" data-name="Path 50"
-                d="M-11.5,0h-11A2.5,2.5,0,0,0-25,2.5v8A2.5,2.5,0,0,0-22.5,13h.5v2.5a.5.5,0,0,0,.309.462A.489.489,0,0,0-21.5,16a.5.5,0,0,0,.354-.146L-18.293,13H-11.5A2.5,2.5,0,0,0-9,10.5v-8A2.5,2.5,0,0,0-11.5,0ZM-10,10.5A1.5,1.5,0,0,1-11.5,12h-7a.5.5,0,0,0-.354.146L-21,14.293V12.5a.5.5,0,0,0-.5-.5h-1A1.5,1.5,0,0,1-24,10.5v-8A1.5,1.5,0,0,1-22.5,1h11A1.5,1.5,0,0,1-10,2.5Zm-2.038-3.809a.518.518,0,0,1-.109.163l-2,2A.5.5,0,0,1-14.5,9a.5.5,0,0,1-.354-.146.5.5,0,0,1,0-.708L-13.707,7H-18.5A1.5,1.5,0,0,0-20,8.5a.5.5,0,0,1-.5.5.5.5,0,0,1-.5-.5A2.5,2.5,0,0,1-18.5,6h4.793l-1.147-1.146a.5.5,0,0,1,0-.708.5.5,0,0,1,.708,0l2,2a.518.518,0,0,1,.109.163A.505.505,0,0,1-12.038,6.691Z"
-                transform="translate(25)" />
+          <CardDash title="Nombre total" :size="userStore.users.length">
+            <svg width="60px" height="60px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5" />
+              <path d="M18 9C19.6569 9 21 7.88071 21 6.5C21 5.11929 19.6569 4 18 4" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" />
+              <path d="M6 9C4.34315 9 3 7.88071 3 6.5C3 5.11929 4.34315 4 6 4" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" />
+              <path
+                d="M17.1973 15C17.7078 15.5883 18 16.2714 18 17C18 19.2091 15.3137 21 12 21C8.68629 21 6 19.2091 6 17C6 14.7909 8.68629 13 12 13C12.3407 13 12.6748 13.0189 13 13.0553"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              <path d="M20 19C21.7542 18.6153 23 17.6411 23 16.5C23 15.3589 21.7542 14.3847 20 14" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" />
+              <path d="M4 19C2.24575 18.6153 1 17.6411 1 16.5C1 15.3589 2.24575 14.3847 4 14" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" />
             </svg>
           </CardDash>
-
 
         </div>
 

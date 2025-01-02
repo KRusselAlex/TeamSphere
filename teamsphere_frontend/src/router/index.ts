@@ -15,7 +15,6 @@ import AddUsers from '@/views/dashboard/users/AddUsers.vue'
 import AllUsers from '@/views/dashboard/users/AllUsers.vue'
 import EditUsers from '@/views/dashboard/users/EditUsers.vue'
 import { decryptData } from '@/api/tokenEncryption';
-import ViewOnePresence from '@/views/dashboard/presence/ViewOnePresence.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -63,11 +62,7 @@ const router = createRouter({
           name: 'attendances/mark',
           component: MarkedPresence
         },
-        {
-          path: 'attendances/:id',
-          name: 'attendances-one',
-          component: ViewOnePresence
-        },
+
         {
           path: 'users/create',
           name: 'usere-create',
@@ -129,7 +124,7 @@ router.afterEach((to) => {
       router.push(redirectTo);
     } else {
 
-      router.push({ name: 'dashboard.home' });
+      router.push({ name: 'attendances' });
     }
   }
 });

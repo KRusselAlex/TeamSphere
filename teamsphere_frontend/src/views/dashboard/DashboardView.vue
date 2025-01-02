@@ -62,7 +62,7 @@ const permissionsData = {
   datasets: [
     {
       label: 'Permissions',
-      data: [120, 50, 30],
+      data: [permissionStore.PermissionStatus('approved'), permissionStore.PermissionStatus('pending'), permissionStore.PermissionStatus('rejected')],
       backgroundColor: ['#4CAF50', '#FFC107', '#F44336'],
       borderColor: ['#388E3C', '#FF9800', '#D32F2F'],
       borderWidth: 1,

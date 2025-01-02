@@ -29,7 +29,6 @@ export const usePermissionStore = defineStore('permission', {
       this.loading = true;
       try {
         const response = await getAllPermissions();
-        console.log(response.data.permissions);
         this.permissions = response.data.permissions.reverse(); // Populate permissions
         this.filteredPermissions = [...this.permissions]; // Initialize filtered permissions
       } catch (error) {
@@ -52,8 +51,6 @@ export const usePermissionStore = defineStore('permission', {
     async addPermission(data: PermissionRequest): Promise<PermissionRequest | undefined | null> {
       try {
         const response = await createPermission(data);
-
-        console.log('Permission created successfully:', response.data);
         if(response.success){
           await this.fetchPermissions();
           return response.data;

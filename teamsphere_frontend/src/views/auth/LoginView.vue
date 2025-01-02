@@ -44,7 +44,7 @@ const validatePassword = (value: string) => {
   return '';
 };
 
-// Watchers pour valider les champs dès qu'ils changent
+
 watch(email, (newValue) => {
   errors.value.email = validateEmail(newValue);
 });
@@ -72,7 +72,7 @@ const submitForm = async () => {
     console.log('Formulaire soumis avec succès');
 
     const response = await loginUser(data);
-    console.log(response);
+
     if (response.success) {
 
       console.log("Successfully logged in");
@@ -80,15 +80,15 @@ const submitForm = async () => {
       if (redirectTo) {
 
         if (Array.isArray(redirectTo)) {
-          // If it's an array, join the elements into a string, assuming it's query values
-          redirectTo = redirectTo.join(',');  // Or format it as needed for a path or query string
+
+          redirectTo = redirectTo.join(',');
         }
 
         localStorage.removeItem('redirectTo');
         router.push(redirectTo);
       } else {
 
-        router.push({ name: 'dashboard.home' });
+        router.push({ name: 'attendances' });
       }
     } else {
       finaleMessage.value = response.response.data.errors;

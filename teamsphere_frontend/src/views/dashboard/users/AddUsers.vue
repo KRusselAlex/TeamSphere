@@ -16,7 +16,7 @@ const profileData = ref({
   profileImage: null as File | null,
 });
 
-const errors = ref<{ [key: string]: string }>({});
+
 
 
 const handleFileUpload = (e: Event) => {
@@ -47,7 +47,7 @@ const handleSubmit = () => {
 
 
   toast.success('Profil mis à jour avec succès!');
-  console.log('Données du profil:', profileData.value);
+  
 };
 
 </script>
@@ -64,7 +64,7 @@ const handleSubmit = () => {
           <div class="grid grid-cols-1 grid-cols-2">
             <div class="flex items-center mb-6">
               <label for="profile-image" class="mr-4">
-                <img v-if="profileData.profileImage" :src="URL.createObjectURL(profileData.profileImage)"
+                <img v-if="profileData.profileImage" :src="`dsd`"
                   alt="Image de profil" class="w-20 h-20 rounded-full object-cover" />
                 <div v-else class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
                   <span class="text-xl">👤</span>
@@ -142,7 +142,7 @@ const handleSubmit = () => {
 
 
           <div class="flex justify-center md:justify-start">
-            <PrimaryButton title=" Ajouter" css="bg-primaryColor text-white py-3 px-6 ">
+            <PrimaryButton type="submit" title=" Ajouter" css="bg-primaryColor text-white py-3 px-6 ">
             </PrimaryButton>
 
           </div>

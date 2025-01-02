@@ -1,5 +1,5 @@
 export const formatDate = (dateStr: string | Date | null | undefined): string => {
-  if(dateStr == null || dateStr == undefined){
+  if( !dateStr || dateStr == null || dateStr == undefined){
     return ""
   }
   const date = new Date(dateStr);

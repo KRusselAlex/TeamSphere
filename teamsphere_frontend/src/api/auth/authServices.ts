@@ -1,5 +1,8 @@
 import * as authApi from './authApi';
 import { encryptData } from '../tokenEncryption';
+import { useUserStore } from '@/stores/userStore';
+import { usePermissionStore } from '@/stores/permissionStore';
+import { usePresenceStore } from '@/stores/pressenceStore';
 import type { LoginRequest, RegisterRequest, ForgotPasswordRequest, ResetPasswordRequest } from './authTypes';
 
 export const loginUser = async (data: LoginRequest) => {
@@ -31,6 +34,16 @@ export const logoutUser = async () => {
     await authApi.logout();
     localStorage.removeItem('userToken');
     localStorage.removeItem('userId');
+    localStorage.removeItem('userRole');
+    const presenceStore = usePresenceStore();
+    presenceStore.$reset();
+
+    const permissionStore = usePermissionStore();
+    permissionStore.$reset();
+
+    const userStore = useUserStore();
+    userStore.$reset();
+
   } catch (error) {
     throw error;
   }

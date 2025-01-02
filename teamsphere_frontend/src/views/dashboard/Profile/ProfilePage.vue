@@ -3,20 +3,21 @@ import DashboardTemplate from '@/components/DashboardTemplate.vue';
 import PrimaryButton from '@/components/PrimaryButton.vue';
 import { ref } from 'vue';
 import { useToast } from 'vue-toast-notification';
+import { PresentUser } from '@/utils/presentUser';
 
-
+const Api_url = import.meta.env.VITE_API_URL_EM
+const user = ref(PresentUser());
 const toast = useToast();
 const profileData = ref({
-  username: 'john_doe',
-  fullName: 'John Doe',
-  email: 'johndoe@example.com',
+  username: user.value?.username,
+  fullName: user.value?.fullname? user.value.fullname : "",
+  email: user.value?.email,
   password: '',
   confirmPassword: '',
   newPassword: '',
-  profileImage: null as File | null,
+  profileImage: user.value?.image? Api_url + user.value?.image : null,
 });
-
-const errors = ref<{ [key: string]: string }>({});
+;
 
 
 const handleFileUpload = (e: Event) => {
@@ -47,7 +48,7 @@ const handleSubmit = () => {
 
 
   toast.success('Profil mis à jour avec succès!');
-  console.log('Données du profil:', profileData.value);
+
 };
 
 </script>
@@ -64,7 +65,7 @@ const handleSubmit = () => {
           <div class="grid grid-cols-1 grid-cols-2">
             <div class="flex items-center mb-6">
               <label for="profile-image" class="mr-4">
-                <img v-if="profileData.profileImage" :src="URL.createObjectURL(profileData.profileImage)"
+                <img v-if="profileData.profileImage" :src="profileData.profileImage"
                   alt="Image de profil" class="w-20 h-20 rounded-full object-cover" />
                 <div v-else class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
                   <span class="text-xl">👤</span>
@@ -73,7 +74,7 @@ const handleSubmit = () => {
               <input id="profile-image" type="file" accept="image/*" class="hidden" @change="handleFileUpload" />
               <button type="button"
                 class="bg-primaryColor bg-opacity-50 text-white py-2 px-4 rounded-full hover:bg-opacity-90"
-                @click="$refs['profile-image'].click()">
+                >
                 Changer l'image
               </button>
 
@@ -138,7 +139,7 @@ const handleSubmit = () => {
 
 
           <div class="flex justify-center md:justify-start">
-            <PrimaryButton title=" Enregistrer" css="bg-primaryColor text-white py-3 px-6 ">
+            <PrimaryButton type="submit" title=" Enregistrer" css="bg-primaryColor text-white py-3 px-6 ">
             </PrimaryButton>
 
           </div>

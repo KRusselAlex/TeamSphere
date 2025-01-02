@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import LogoImage from './LogoImage.vue';
-
+import { PresentUser } from '@/utils/presentUser';
 import { ref } from 'vue';
 
+const user = ref(PresentUser());
 const widthSide = ref("18rem");
 const displaySide = ref("flex");
 const itemsAlign = ref('start')
@@ -59,7 +60,7 @@ const desktopNavbar = () => {
       <div>
         <h3 :style="{ display: displaySide }" class="text-gray-500 font-sans">Menu</h3>
         <ul :style="{ 'align-items': itemsAlign }" class="flex flex-col font-serif justify-center w-full gap-y-3 py-3 ">
-          <li class="w-full">
+          <li class="w-full" v-if="user?.role">
             <RouterLink to="/dashboard"
               class="px-4 py-2 text-gray-900 flex flex-row items-center w-full gap-4  border-gray-300   md:hover:bg-[#fff7ed] hover:font-bold   hover:text-primaryColor bg-opacity-70  rounded-inputRadius">
               <span>
@@ -113,7 +114,7 @@ const desktopNavbar = () => {
 
         </ul>
       </div>
-      <div>
+      <div v-if="user?.role">
         <h3 :style="{ display: displaySide }" class="text-gray-500 font-sans">Admin</h3>
         <ul :style="{ 'align-items': itemsAlign }" class="flex flex-col font-serif justify-center w-full gap-y-3 py-3 ">
 

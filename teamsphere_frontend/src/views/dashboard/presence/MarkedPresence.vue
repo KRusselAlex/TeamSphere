@@ -4,7 +4,11 @@
       <h2 class="text-3xl font-semibold font-sans text-primaryColor mb-6 animated fadeIn">Marquer votre présence</h2>
       <div class="p-8 bg-white border font-serif rounded-lg">
 
+        <span v-show="message" :class="{
+          'bg-green-100 text-green-800': message === 'Vous etes Present',
+          'bg-red-100 text-red-800': message === 'Erreur Reessayer',
 
+        }" class="text-xl text-center rounded-lg py-3 italic">{{ message }}</span>
         <div class="text-center mb-6 animated fadeIn" :class="{ 'fadeInDelay': true }">
           <h3 class="text-xl text-gray-600">Bienvenue, <strong>{{ username }}</strong>!</h3>
           <p class="text-lg text-gray-500">Nous sommes ravis de vous voir ici aujourd'hui.</p>
@@ -32,8 +36,8 @@
             Historique des actions
           </h4>
           <ul class="list-disc pl-6 text-gray-600">
-            <li>Présence marquée le {{ lastMarkedDate }}</li>
-            <li>Demande de congé en attente depuis le {{ lastLeaveRequest }}</li>
+            <li>Présence marquée le {{ lastMarkedDate }} a {{ historique }}</li>
+
           </ul>
         </div>
 
@@ -64,58 +68,70 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate } from "@/utils/DateConverter";
+import { formatDate, formatDateEtHeure } from "@/utils/DateConverter";
 import DashboardTemplate from "@/components/DashboardTemplate.vue";
 import { ref, onMounted } from "vue";
+import { usePresenceStore } from "@/stores/pressenceStore";
+import { decryptData } from '@/api/tokenEncryption';
+import type { PresenceRequest } from "@/api/presence/presenceTypes";
+import { useUserStore } from "@/stores/userStore";
+import type { UserRequest } from "@/api/user/userTypes";
 
+const userStore = useUserStore();
+const presenceStore = usePresenceStore();
+const decryptDatas = decryptData();
+const userID = decryptDatas ? decryptDatas[1] : null;
 
-const username = ref("John Doe");
-const todayDate = ref(formatDate(new Date())); // Date en lettres
-const currentTime = ref(new Date().toLocaleTimeString()); // Heure actuelle
-const lastMarkedDate = ref("01 Jan 2025");
-const lastLeaveRequest = ref("15 Dec 2024");
-
+const todayDate = ref(formatDate(new Date()));
+const currentTime = ref(new Date().toLocaleTimeString());
+const lastMarkedDate = ref(formatDate(presenceStore.presences[1].marked_at));
+const historique = formatDateEtHeure(presenceStore.presences[1].marked_at);
+// const lastLeaveRequest = ref("15 Dec 2024");
+const userPresent = ref<UserRequest | null>(null);;
+const message = ref('');
 const hasMarkedPresence = ref(false);
 const markedTime = ref("");
 
+
+  userPresent.value =   userStore.getOneUser(Number(userID));
+const username = ref(userPresent.value?.username);
 
 const updateTime = () => {
   currentTime.value = new Date().toLocaleTimeString();
 };
 
-
 onMounted(() => {
   setInterval(updateTime, 1000);
+  checkPresenceToday();
 });
 
 
-const markPresence = () => {
+const checkPresenceToday = () => {
+  if (userID) {
+    const userPresence = presenceStore.hasMarkedPresenceToday(Number(userID));
+    if (userPresence) {
+      hasMarkedPresence.value = true;
+      markedTime.value = new Date().toLocaleTimeString();
+    }
+  }
+};
 
-  
-  hasMarkedPresence.value = true;
-  markedTime.value = new Date().toLocaleTimeString();
+
+const markPresence = async () => {
+  if (userID) {
+    const data: PresenceRequest = {
+      user_id: Number(userID),
+    };
+
+    const response = await presenceStore.addPresence(data);
+
+    if (response) {
+      message.value = "Vous êtes présent";
+      hasMarkedPresence.value = true;
+      markedTime.value = new Date().toLocaleTimeString();
+    } else {
+      message.value = "Vous avez déjà marqué votre présence aujourd'hui";
+    }
+  }
 };
 </script>
-
-<style scoped>
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fadeIn {
-  animation: fadeIn 0.5s ease-out forwards;
-}
-
-.fadeInDelay {
-  animation-delay: 0.3s;
-}
-</style>

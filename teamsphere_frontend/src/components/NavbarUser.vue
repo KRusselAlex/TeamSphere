@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import SearchBar from './SearchBar.vue';
+import { useUserStore } from "@/stores/userStore";
+import { decryptData } from '@/api/tokenEncryption';
+import { ref } from 'vue';
+const userStore = useUserStore();
 
-
+const decryptDatas = decryptData();
+const userID = decryptDatas ? decryptDatas[1] : null;
+const userPresent = ref(userStore.getOneUser(Number(userID)));
 </script>
 
 <template>
   <header class="w-full">
     <nav class="w-full">
-      <div class=" w-full flex items-center  gap-4   border-b border-gray-100">
+      <div class=" w-full flex items-center  gap-4   ">
         <div class="text-md px-6 h-full  flex gap-2 justify-between w-full items-center ">
           <SearchBar />
           <div class="flex gap-x-3 items-center">
@@ -20,7 +26,7 @@ import SearchBar from './SearchBar.vue';
               </svg>
             </span>
             <img src="" alt="">
-            <p class="text-sm hidden md:flex md:text-base">Alex Russel</p>
+            <p class="text-sm hidden md:flex md:text-base">{{ userPresent? userPresent.username : "" }}</p>
 
           </div>
         </div>

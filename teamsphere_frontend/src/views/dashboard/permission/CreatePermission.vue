@@ -70,7 +70,6 @@ const handleSubmit = async () => {
   }
 
 
-  console.log('Form submitted', formData);
   const response = await permissionStore.addPermission(formData);
 
   if (response) {

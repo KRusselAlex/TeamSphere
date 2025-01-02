@@ -8,22 +8,22 @@ export const useUserStore = defineStore('user', {
     filteruser: [] as UserRequest[],
     loading: false,
   }),
-  persist: true, // Ensure state is persisted
+  persist: true,
   actions: {
-    async getOneUser(id: number) {
+    getOneUser(id: number) {
       try {
         const user = this.users.find((user) => user.id === id);
-        if (!user) {
-          return null;
+
+
+        if (user) {
+          return user;
         }
-        return user;
 
+        return null
       } catch (error) {
-
-        console.log(error)
-
+        console.log('Error fetching user:', error);
+        return null;
       }
-
     },
 
     async fetchUsers(): Promise<void> {
@@ -38,25 +38,10 @@ export const useUserStore = defineStore('user', {
         this.loading = false;
       }
     },
-
-    // countUsersByRole(role: number): number {
-    //   return this.users.filter((user) => user.role === role ).length;
-    // },
-
-    // filterUsersByRole(role: number): UserRequest[] {
-    //   if (role === 4) {
-    //     this.filteruser = [...this.users];
-    //     return this.users;
-    //   }
-    //   this.filteruser = this.users.filter((user) => user.role === role);
-    //   return this.filteruser;
-    // },
-
     async deleteUserById(id: number) {
       try {
         await deleteUser(id);
-        this.users = this.users.filter((user) => user.id !== id); // Update local state
-        console.log(`User with ID ${id} deleted successfully`);
+        this.users = this.users.filter((user) => user.id !== id);
       } catch (error) {
         console.error(`Error deleting user with ID ${id}:`, error);
       }
@@ -65,8 +50,7 @@ export const useUserStore = defineStore('user', {
     async addUser(data: UserRequest) {
       try {
         const response = await createUser(data);
-        this.users.push(response.data); // Update local state
-        console.log('User created successfully:', response.data);
+        this.users.push(response.data);
         return response.data;
       } catch (error) {
         console.error('Error adding user:', error);
@@ -78,9 +62,8 @@ export const useUserStore = defineStore('user', {
         const response = await updateUser(id, data);
         const index = this.users.findIndex((user) => user.id === id);
         if (index !== -1) {
-          this.users[index] = response.data; // Update local state
+          this.users[index] = response.data;
         }
-        console.log('User updated successfully:', response.data);
         return response.data;
       } catch (error) {
         console.error(`Error updating user with ID ${id}:`, error);

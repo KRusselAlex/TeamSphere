@@ -5,7 +5,9 @@ import PrimaryButton from '../PrimaryButton.vue';
 import type { PermissionRequest } from '@/api/permission/permissionsTypes';
 import { usePermissionStore } from "@/stores/permissionStore"
 import { decryptData } from '@/api/tokenEncryption';
+import { PresentUser } from '@/utils/presentUser';
 
+const user = ref(PresentUser());
 const decryptDatas = decryptData();
 const userID = decryptDatas ? decryptDatas[1] : null;
 const selectedDate = ref('');
@@ -14,7 +16,7 @@ const permissionStore = usePermissionStore();
 const handleStatusApprove= async(id:number) => {
 
   const permissionUpdateData =  permissionStore.getOnePermission(id)
-  console.log(permissionUpdateData)
+
   if(permissionUpdateData){
     permissionUpdateData.status = 'approved';
     permissionUpdateData.admin_id = Number(userID);
@@ -37,7 +39,7 @@ const handleStatusApprove= async(id:number) => {
 const handleStatusReject = async (id: number) => {
 
   const permissionUpdateData = permissionStore.getOnePermission(id)
-  console.log(permissionUpdateData)
+
   if (permissionUpdateData) {
     permissionUpdateData.status = 'rejected';
     permissionUpdateData.admin_id = Number(userID);
@@ -142,7 +144,7 @@ const props = defineProps<{
 
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex justify-center items-center">
             <button class="text-indigo-600 hover:text-indigo-900"
-              @click="handleStatusApprove(permission?.id? permission.id : 0 )" v-if="permission.status == 'pending'">
+              @click="handleStatusApprove(permission?.id? permission.id : 0 )" v-if="permission.status == 'pending' && user?.role">
               <svg fill="#28A745" width="35px" height="35px" viewBox="-1.7 0 20.4 20.4"
                 xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
                 <path

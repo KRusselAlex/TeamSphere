@@ -21,7 +21,7 @@ const Api_url = import.meta.env.VITE_API_URL_EM
 
 
 const permission = ref(permissionStore.getOnePermission(Number(route.params.id)))
-console.log(permission.value);
+
 if (permission.value == null) {
   router.push("notfound");
 }
@@ -44,14 +44,14 @@ const permissionData = reactive({
 const handleApprove = () => {
   permissionData.status = 'approved';
   alert('Permission approuvée');
-  console.log('Permission approuvée', permissionData);
+  
 };
 
 
 const handleReject = () => {
   permissionData.status = 'rejected';
   alert('Permission rejetée');
-  console.log('Permission rejetée', permissionData);
+
 };
 </script>
 

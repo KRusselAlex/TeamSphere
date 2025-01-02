@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import type { PresenceRequest } from '@/api/presence/presenceTypes';
+import { formatDate } from '@/utils/DateConverter';
 import {
   createPresence,
   updatePresence,
@@ -31,7 +32,7 @@ export const usePresenceStore = defineStore('presence', {
         const response = await getAllPresences();
         console.log(response.data.presences);
         this.presences = response.data.presences.reverse();
-        this.filteredPresences = [...this.presences]; 
+        this.filteredPresences = [...this.presences];
       } catch (error) {
         console.error('Error fetching presences:', error);
       } finally {
@@ -63,6 +64,13 @@ export const usePresenceStore = defineStore('presence', {
       }
     },
 
+    hasMarkedPresenceToday(userId: number): boolean {
+      const today = formatDate(new Date());
+      return this.presences.some(
+        (presence) => presence.user_id === userId && formatDate(presence.marked_at) === today
+      );
+    },
+
     async editPresence(id: number, data: PresenceRequest): Promise<PresenceRequest | undefined | null> {
       try {
         const response = await updatePresence(id, data);
@@ -81,13 +89,15 @@ export const usePresenceStore = defineStore('presence', {
       }
     },
 
-    filterPresences(value: string): PresenceRequest[] {
-      const lowerCaseValue = value.toLowerCase();
-      this.filteredPresences = this.presences.filter(
-        (pres) =>
-          pres.username.toLowerCase().includes(lowerCaseValue)
-      );
-      return this.filteredPresences;
-    },
+
+
+    // filterPresences(value: string): PresenceRequest[] {
+    //   const lowerCaseValue = value.toLowerCase();
+    //   this.filteredPresences = this.presences.filter(
+    //     (pres) =>
+    //       pres.username.toLowerCase().includes(lowerCaseValue)
+    //   );
+    //   return this.filteredPresences;
+    // },
   },
 });

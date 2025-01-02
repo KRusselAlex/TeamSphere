@@ -5,8 +5,19 @@ import { defineProps } from 'vue';
 import PrimaryButton from '../PrimaryButton.vue';
 import type { PresenceRequest } from '@/api/presence/presenceTypes';
 import { formatDateEtHeure, formatDateEtHeureDeux } from '@/utils/DateConverter';
+import PresenceModal from './PresenceModal.vue';
 
 const selectedDate = ref('');
+const isModalVisible = ref(false);
+const selectedPresence = ref<PresenceRequest | null>(null);
+
+const openModal = (presenceData: PresenceRequest | null) => {
+  if (presenceData) {
+    selectedPresence.value = presenceData;
+    isModalVisible.value = true;
+    console.log("je suis",presenceData)
+  }
+};
 
 
 
@@ -91,13 +102,22 @@ console.log(props.presences)
 
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex justify-center items-center">
 
-            <RouterLink :to="`/dashboard/attendances/${presence?.id}`" class="ml-2 text-red-600 hover:text-red-900">
+            <!-- <RouterLink :to="`/dashboard/attendances/${presence?.id}`" class="ml-2 text-red-600 hover:text-red-900">
               <svg width="28px" height="28px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="m16 0c8.836556 0 16 7.163444 16 16s-7.163444 16-16 16-16-7.163444-16-16 7.163444-16 16-16zm1.3 20.5h-2.6v2.6h2.6zm-1.3-11.5c-2.209139 0-4 1.790861-4 4h2l.0054857-.1492623c.0763492-1.0348599.9401525-1.8507377 1.9945143-1.8507377 1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2h-1v4h2l.0006624-2.126188c1.7248911-.4442732 2.9993376-2.0109264 2.9993376-3.873812 0-2.209139-1.790861-4-4-4z"
                   fill="#000" />
               </svg>
-            </RouterLink>
+            </RouterLink> -->
+            <button class="ml-2 text-red-600 hover:text-red-900" @click="openModal(presence)">
+              <svg width="28px" height="28px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="m16 0c8.836556 0 16 7.163444 16 16s-7.163444 16-16 16-16-7.163444-16-16 7.163444-16 16-16zm1.3 20.5h-2.6v2.6h2.6zm-1.3-11.5c-2.209139 0-4 1.790861-4 4h2l.0054857-.1492623c.0763492-1.0348599.9401525-1.8507377 1.9945143-1.8507377 1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2h-1v4h2l.0006624-2.126188c1.7248911-.4442732 2.9993376-2.0109264 2.9993376-3.873812 0-2.209139-1.790861-4-4-4z"
+                  fill="#000" />
+              </svg>
+            </button>
+            <PresenceModal :visible="isModalVisible" :presenceData="selectedPresence"
+              @update:visible="isModalVisible = $event" v-if="isModalVisible" />
           </td>
         </tr>
       </tbody>

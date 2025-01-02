@@ -125,7 +125,7 @@ const submitForm = async () => {
       if (response.response.data.errors?.username?.[0]) {
         finaleMessage.value.username = "Le nom d'utilisateur a déjà été pris."
       }
-      console.log("after registration", response.response.data.errors.email[0]);
+
     }
 
   } else {

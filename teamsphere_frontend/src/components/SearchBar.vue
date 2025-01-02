@@ -18,10 +18,5 @@
 
     <input type="text" placeholder="Recherche..." class="w-full outline-none  text-gray-900   bg-white text-sm ">
   </div>
-  <div>
 
-
-
-
-  </div>
 </template>

@@ -4,7 +4,7 @@ import { defineProps } from 'vue';
 interface ButtonProps {
   title: string;
   css?: string;
-  type?: 'button' | 'submit' | 'reset' ;
+  type: 'button' | 'submit' | 'reset' ;
 }
 
 

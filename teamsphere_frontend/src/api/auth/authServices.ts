@@ -1,12 +1,16 @@
-// authService.ts
-
 import * as authApi from './authApi';
+import { encryptData } from '../tokenEncryption';
 import type { LoginRequest, RegisterRequest, ForgotPasswordRequest, ResetPasswordRequest } from './authTypes';
 
 export const loginUser = async (data: LoginRequest) => {
   try {
     const response = await authApi.login(data);
-    localStorage.setItem('token', response.token);
+    console.log(response.success);
+    if(response.success){
+      console.log("bool true or false",encryptData(response.data.token,response.data.user.id));
+
+    }
+
     return response;
   } catch (error) {
     throw error;
@@ -16,7 +20,6 @@ export const loginUser = async (data: LoginRequest) => {
 export const registerUser = async (data: RegisterRequest) => {
   try {
     const response = await authApi.register(data);
-    localStorage.setItem('token', response.token);
     return response;
   } catch (error) {
     throw error;
@@ -26,7 +29,8 @@ export const registerUser = async (data: RegisterRequest) => {
 export const logoutUser = async () => {
   try {
     await authApi.logout();
-    localStorage.removeItem('token');
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('userId');
   } catch (error) {
     throw error;
   }

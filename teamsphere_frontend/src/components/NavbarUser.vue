@@ -7,8 +7,8 @@ import SearchBar from './SearchBar.vue';
 <template>
   <header class="w-full">
     <nav class="w-full">
-      <div class=" w-full flex items-center  gap-4 px-2  border-b border-gray-100">
-        <div class="text-md px-8 h-full  flex gap-2 justify-between w-full items-center ">
+      <div class=" w-full flex items-center  gap-4   border-b border-gray-100">
+        <div class="text-md px-6 h-full  flex gap-2 justify-between w-full items-center ">
           <SearchBar />
           <div class="flex gap-x-3 items-center">
             <span>

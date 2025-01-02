@@ -11,8 +11,8 @@ const selectedDate = ref('');
 <template>
   <div class="flex flex-col gap-6 bg-white border rounded-lg p-8">
     <div class="flex justify-between">
-      <RouterLink to="/dashboard/users/create">
-        <PrimaryButton title="Ajouter un employee" css="bg-primaryColor px-3 py-2" />
+      <RouterLink to="/dashboard/attendances/mark">
+        <PrimaryButton title="Marquer la présence" css="bg-primaryColor font-semibold text-2xl  px-4 py-4" />
       </RouterLink>
 
       <div class="flex gap-x-4 items-center">
@@ -95,3 +95,7 @@ const selectedDate = ref('');
     </table>
   </div>
 </template>
+
+<style scoped>
+/* Ajouter des styles spécifiques ici si nécessaire */
+</style>

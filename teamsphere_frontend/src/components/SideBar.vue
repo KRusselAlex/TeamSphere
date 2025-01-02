@@ -77,7 +77,7 @@ const desktopNavbar = () => {
             </RouterLink>
           </li>
           <li class="w-full">
-            <RouterLink to="/dashboard"
+            <RouterLink to="/dashboard/attendances"
               class="px-4 py-2 text-gray-900 flex flex-row items-center w-full gap-4  border-gray-300   md:hover:bg-[#fff7ed] hover:font-bold   hover:text-primaryColor bg-opacity-70  rounded-inputRadius">
               <span>
                 <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +119,7 @@ const desktopNavbar = () => {
 
 
           <li class="w-full">
-            <RouterLink to="/dashboard"
+            <RouterLink :to="{ name: 'permissions.viewAll' }"
               class="px-4 py-2 text-gray-900 flex flex-row items-center w-full gap-4  border-gray-300   md:hover:bg-[#fff7ed] hover:font-bold   hover:text-primaryColor bg-opacity-70  rounded-inputRadius">
               <span>
                 <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 16 16" id="request-sent-16px"
@@ -137,7 +137,7 @@ const desktopNavbar = () => {
             </RouterLink>
           </li>
           <li class="w-full">
-            <RouterLink to="/dashboard"
+            <RouterLink to="/dashboard/users/view"
               class="px-4 py-2 text-gray-900 flex flex-row items-center w-full gap-4  border-gray-300   md:hover:bg-[#fff7ed] hover:font-bold   hover:text-primaryColor bg-opacity-70  rounded-inputRadius">
               <span>
                 <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -157,7 +157,7 @@ const desktopNavbar = () => {
 
               </span>
 
-              <span :style="{ display: displaySide }">Users</span>
+              <span :style="{ display: displaySide }">Employee</span>
             </RouterLink>
           </li>
 
@@ -169,7 +169,7 @@ const desktopNavbar = () => {
 
 
           <li class="w-full">
-            <RouterLink to="/dashboard"
+            <RouterLink to="/dashboard/profile"
               class="px-4 py-2 text-gray-900 flex flex-row items-center w-full gap-4  border-gray-300   md:hover:bg-[#fff7ed] hover:font-bold   hover:text-primaryColor bg-opacity-70  rounded-inputRadius">
               <span>
                 <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1">
@@ -195,7 +195,7 @@ const desktopNavbar = () => {
             </RouterLink>
           </li>
           <li class="w-full">
-            <RouterLink to="/dashboard"
+            <button
               class="px-4 py-2 text-gray-900 flex flex-row items-center w-full gap-4  border-gray-300   md:hover:bg-[#fff7ed] hover:font-bold   hover:text-primaryColor bg-opacity-70  rounded-inputRadius">
               <span>
                 <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -213,7 +213,7 @@ const desktopNavbar = () => {
               </span>
 
               <span :style="{ display: displaySide }">Deconnexion</span>
-            </RouterLink>
+            </button>
           </li>
 
         </ul>

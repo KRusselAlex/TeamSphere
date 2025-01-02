@@ -3,32 +3,35 @@
 import axios from 'axios';
 import type { LoginRequest, RegisterRequest, ForgotPasswordRequest, ResetPasswordRequest } from './authTypes';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL + "/auth/";
 
-// Create axios instance
-// const apiClient = axios.create({
-//   baseURL: API_URL,
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-// });
+axios.defaults.withCredentials = true;
+const token = localStorage.getItem('auth_token');
+
+if (token) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
 
 
 export const login = async (data: LoginRequest) => {
   try {
-    const response = await axios.post(`${API_URL}/auth/login`, data);
+    const response = await axios.post(`${API_URL}login`, data);
     return response.data;
   } catch (error) {
     console.log(error)
+    return error
   }
 };
 
 export const register = async (data: RegisterRequest) => {
   try {
-    const response = await axios.post(`${API_URL}/auth/register`, data);
+    console.log(data)
+    const response = await axios.post(`${API_URL}register`, data);
     return response.data;
+
   } catch (error) {
     console.log(error)
+    return error
   }
 };
 

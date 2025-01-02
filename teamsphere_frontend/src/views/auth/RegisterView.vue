@@ -110,19 +110,20 @@ const submitForm = async () => {
 
 
   if (!errors.value.username && !errors.value.email && !errors.value.password && !errors.value.confirmPassword) {
-    console.log('Formulaire soumis avec succès');
-    const response = await registerUser(data);
 
-    if (response.succces) {
+    const response = await registerUser(data);
+    console.log(response.success);
+
+    if (response.success) {
       router.push(
         "/auth/login"
       )
     }else{
-      finaleMessage.value = response.response.data.errors;
-      if (response.response.data.errors?.email?.[0]){
+      finaleMessage.value = response?.response?.data?.errors;
+      if (response?.response?.data?.errors?.email?.[0]){
         finaleMessage.value.email = "L'email a déjà été pris."
       }
-      if (response.response.data.errors?.username?.[0]) {
+      if (response?.response?.data?.errors?.username?.[0]) {
         finaleMessage.value.username = "Le nom d'utilisateur a déjà été pris."
       }
 

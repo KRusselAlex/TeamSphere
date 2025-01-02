@@ -2,10 +2,24 @@
 import DashboardTemplate from '@/components/DashboardTemplate.vue';
 import CardDash from '@/components/CardDash.vue';
 import DataTablePresence from '@/components/presence/DataTablePresence.vue';
+import { usePermissionStore } from "@/stores/permissionStore"
+import { useUserStore } from '@/stores/userStore';
 import { usePresenceStore } from '@/stores/pressenceStore';
+import { onMounted } from 'vue';
 
 const presenceStore = usePresenceStore();
-presenceStore.fetchPresences()
+
+
+const permissionStore = usePermissionStore();
+
+const userStore = useUserStore();
+
+onMounted(() => {
+  presenceStore.fetchPresences();
+  permissionStore.fetchPermissions();
+  userStore.fetchUsers();
+});
+
 
 </script>
 

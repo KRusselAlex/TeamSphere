@@ -24,7 +24,7 @@ class PermissionController extends Controller
             $user = $request->user();
 
 
-            if ($user->role) {
+            if ($user->role == 1) {
 
                 $permissions = DB::table('permissions')
                 ->join('users', 'permissions.user_id', '=', 'users.id')

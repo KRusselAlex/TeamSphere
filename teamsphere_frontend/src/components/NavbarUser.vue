@@ -26,7 +26,7 @@ const userPresent = ref(userStore.getOneUser(Number(userID)));
               </svg>
             </span>
             <img src="" alt="">
-            <p class="text-sm hidden md:flex md:text-base">{{ userPresent? userPresent.username : "" }}</p>
+            <p class="text-sm hidden md:flex md:text-base">{{  userPresent?.username }}</p>
 
           </div>
         </div>

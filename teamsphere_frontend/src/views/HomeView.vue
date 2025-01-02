@@ -4,13 +4,23 @@ import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 import LogoImage from "@/components/LogoImage.vue";
 import { decryptData } from "@/api/tokenEncryption";
+import { usePermissionStore } from "@/stores/permissionStore"
+import { useUserStore } from '@/stores/userStore';
+import { usePresenceStore } from '@/stores/pressenceStore';
+const presenceStore = usePresenceStore();
+presenceStore.fetchPresences()
+
+const permissionStore = usePermissionStore();
+permissionStore.fetchPermissions();
+const userStore = useUserStore();
+userStore.fetchUsers();
 
 
 const router = useRouter();
 const route = useRoute();
 
 const message = ref("");
-const status = ref("info"); // Peut être "info", "success", ou "error"
+const status = ref("info");
 const isLoading = ref(false);
 
 onMounted(async () => {
@@ -27,7 +37,7 @@ onMounted(async () => {
   }
 
   if (!localStorageToken) {
-    // Pas de token dans le local storage
+
     message.value =
       "Votre session a expiré. Veuillez vous reconnecter pour continuer.";
     status.value = "error";
@@ -36,10 +46,8 @@ onMounted(async () => {
   }
 
   try {
-    // Affiche un état de chargement
     isLoading.value = true;
 
-    // Effectuer une requête GET avec le token comme Bearer dans l'autorisation
     const response = await axios.get(verificationToken as string, {
       headers: {
         Authorization: `Bearer ${localStorageToken}`,
@@ -47,13 +55,13 @@ onMounted(async () => {
     });
 
     if (response.status === 200) {
-      // Succès de la requête
+
       message.value =
         "Votre email a été vérifié avec succès ! Redirection en cours...";
       status.value = "success";
       setTimeout(() => router.push("/dashboard/attendances"), 3000);
     } else {
-      // Réponse inattendue
+
       message.value =
         "Une erreur est survenue lors de la vérification de votre email. Veuillez réessayer.";
       status.value = "error";

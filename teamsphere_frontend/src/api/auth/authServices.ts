@@ -44,6 +44,7 @@ export const logoutUser = async () => {
     const userStore = useUserStore();
     userStore.$reset();
 
+
   } catch (error) {
     throw error;
   }

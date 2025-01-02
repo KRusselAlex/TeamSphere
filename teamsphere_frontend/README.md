@@ -1,45 +1,67 @@
-# teamsphere_frontend
+# Vue.js Application
 
-This template should help get you started developing with Vue 3 in Vite.
+## Description
 
-## Recommended IDE Setup
+Cette application Vue.js offre une interface utilisateur moderne et réactive pour gérer les fonctionnalités spécifiques de votre projet. Elle est construite avec Vue 3 et utilise Vue Router pour la navigation et Vuex pour la gestion de l'état.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Prérequis
 
-## Type Support for `.vue` Imports in TS
+Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur votre machine :
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- [Node.js](https://nodejs.org/en/) version 14 ou supérieure
+- [npm](https://www.npmjs.com/) (gestionnaire de paquets)
 
-## Customize configuration
+## Installation
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+1. Clonez le dépôt sur votre machine locale :
+   ```bash
+   git clone 
+Accédez au répertoire du projet :
+``
 
-## Project Setup
-
-```sh
+bash
+Copy code
 npm install
-```
+Configuration
+Avant de démarrer l'application, vous devez configurer les variables d'environnement. Créez un fichier .env à la racine de votre projet et ajoutez les variables suivantes :
 
-### Compile and Hot-Reload for Development
+makefile
+Copy code
+VITE_API_URL=http://127.0.0.1:8000/api/v1
+VITE_LOCAL_SECRET_KEY=alex-secret-key
+VITE_API_URL_EM=http://127.0.0.1:8000
+VITE_API_URL : URL de l'API à utiliser pour les appels API.
+VITE_LOCAL_SECRET_KEY : Clé secrète utilisée pour la gestion des sessions ou autres mécanismes de sécurité.
+VITE_API_URL_EM : URL pour l'API EM, qui peut être utilisée pour d'autres services ou fonctionnalités.
+Démarrer l'application
+Pour démarrer l'application en mode développement, utilisez la commande suivante :
 
-```sh
-npm run dev
-```
+bash
+Copy code
+npm run serve
+Cela lancera l'application à l'adresse suivante : http://localhost:8080
 
-### Type-Check, Compile and Minify for Production
+Scripts disponibles
+npm run serve : Démarre le serveur de développement
+npm run build : Compile et optimise le projet pour la production
+npm run lint : Vérifie le code pour détecter d'éventuelles erreurs ou incohérences
+Déploiement
+Pour déployer l'application, suivez ces étapes :
 
-```sh
+Compilez le projet pour la production :
+
+bash
+Copy code
 npm run build
-```
+Déployez le contenu généré dans le dossier dist sur votre serveur.
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+Contribution
+Les contributions sont les bienvenues ! Si vous avez des suggestions ou souhaitez corriger des bugs, n'hésitez pas à créer un pull request.
 
-```sh
-npm run test:unit
-```
+Licence
+Ce projet est sous licence MIT.
 
-### Lint with [ESLint](https://eslint.org/)
+rust
+Copy code
 
-```sh
-npm run lint
-```
+Cela permettra aux utilisateurs de comprendre rapidement les variables à configurer

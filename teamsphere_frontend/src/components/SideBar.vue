@@ -2,7 +2,11 @@
 import LogoImage from './LogoImage.vue';
 import { PresentUser } from '@/utils/presentUser';
 import { ref } from 'vue';
+import { logoutUser } from '@/api/auth/authServices';
+import { useRouter } from 'vue-router';
 
+
+const router = useRouter();
 const user = ref(PresentUser());
 const widthSide = ref("18rem");
 const displaySide = ref("flex");
@@ -26,6 +30,11 @@ const desktopNavbar = () => {
   show.value =  true
   itemsAlign.value = "start"
 
+}
+
+const handleLogout = async () =>{
+  await logoutUser()
+  router.push("/auth/login")
 }
 
 
@@ -196,7 +205,7 @@ const desktopNavbar = () => {
             </RouterLink>
           </li>
           <li class="w-full">
-            <button
+            <button @click="handleLogout"
               class="px-4 py-2 text-gray-900 flex flex-row items-center w-full gap-4  border-gray-300   md:hover:bg-[#fff7ed] hover:font-bold   hover:text-primaryColor bg-opacity-70  rounded-inputRadius">
               <span>
                 <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

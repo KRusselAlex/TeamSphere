@@ -9,4 +9,4 @@ Route::get('/verified-page', function () {
     return view('verified-page');
 })->name('verified.page');
 
-// require __DIR__.'/auth.php';
+

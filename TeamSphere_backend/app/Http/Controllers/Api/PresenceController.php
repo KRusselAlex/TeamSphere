@@ -13,13 +13,28 @@ use Exception;
 class PresenceController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $presences = DB::table('presences')
-                ->join('users', 'presences.user_id', '=', 'users.id')
-                ->select('presences.*', 'users.username', 'users.fullname')
-                ->paginate(30);
+
+
+            $user = $request->user();
+
+
+            if ($user->role) {
+
+                $presences = DB::table('presences')
+                    ->join('users', 'presences.user_id', '=', 'users.id')
+                    ->select('presences.*', 'users.username', 'users.fullname')
+                    ->paginate(30);
+            } else {
+
+                $presences = DB::table('presences')
+                    ->where('presences.user_id', '=', $user->id)
+                    ->join('users', 'presences.user_id', '=', 'users.id')
+                    ->select('presences.*', 'users.username', 'users.fullname')
+                    ->paginate(30);
+            }
 
             if ($presences->isNotEmpty()) {
 
@@ -162,7 +177,6 @@ class PresenceController extends Controller
                     'errors' => null
 
                 ], 200);
-
             } else {
                 return response()->json([
                     'success' => false,

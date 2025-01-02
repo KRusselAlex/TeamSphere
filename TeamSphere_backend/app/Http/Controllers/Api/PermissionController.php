@@ -17,16 +17,30 @@ use Exception;
 
 class PermissionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $permissions = DB::table('permissions')
+
+            $user = $request->user();
+
+
+            if ($user->role) {
+
+                $permissions = DB::table('permissions')
                 ->join('users', 'permissions.user_id', '=', 'users.id')
                 ->select('permissions.*', 'users.username', 'users.fullname')
                 ->paginate(30);
+            } else {
+
+                $permissions = DB::table('permissions')
+                ->where('permissions.user_id', '=', $user->id)
+                    ->join('users', 'permissions.user_id', '=', 'users.id')
+                    ->select('permissions.*', 'users.username', 'users.fullname')
+                    ->paginate(30);
+            }
+
 
             if ($permissions->isNotEmpty()) {
-
                 return response()->json([
                     'success' => true,
                     'data' => [
@@ -36,24 +50,23 @@ class PermissionController extends Controller
                     'errors' => null
                 ], 200);
             } else {
-
                 return response()->json([
                     'success' => false,
-                    'data' =>  null,
+                    'data' => null,
                     'message' => "No Permissions Available",
                     'errors' => ['permission' => 'No Permissions available']
                 ], 200);
             }
         } catch (Exception $e) {
-
             return response()->json([
                 'success' => false,
                 'data' => null,
-                'message' => "An error occurred while retrieving Permissions,database error",
+                'message' => "An error occurred while retrieving Permissions, database error",
                 'errors' => ['exception' => $e->getMessage()]
             ], 500);
         }
     }
+
 
     public function show($id)
     {
@@ -102,7 +115,7 @@ class PermissionController extends Controller
                 'start_date' => 'required|date|after_or_equal:today',
                 'end_date' => 'required|date|after_or_equal:start_date',
                 'reason' => 'required|string',
-                'justification' => 'file|mimes:pdf,jpg,jpeg,png',
+                'justification' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
             ]);
 
 

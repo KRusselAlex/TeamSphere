@@ -2,8 +2,11 @@
 import DashboardTemplate from '@/components/DashboardTemplate.vue';
 import CardDash from '@/components/CardDash.vue';
 import DataTablePresence from '@/components/presence/DataTablePresence.vue';
-// import PrimaryButton from '@/components/PrimaryButton.vue';
-// import { ref } from 'vue';
+import { usePresenceStore } from '@/stores/pressenceStore';
+
+const presenceStore = usePresenceStore();
+presenceStore.fetchPresences()
+
 </script>
 
 <template>
@@ -42,8 +45,8 @@ import DataTablePresence from '@/components/presence/DataTablePresence.vue';
         </CardDash>
       </div>
 
-    <!-- Tableau de permissions -->
-    <DataTablePresence />
+
+    <DataTablePresence :presences="presenceStore.presences" />
     </div>
   </DashboardTemplate>
 </template>

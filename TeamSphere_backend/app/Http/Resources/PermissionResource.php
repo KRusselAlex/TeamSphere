@@ -17,7 +17,7 @@ class PermissionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'employee_id' => $this->user_id,
+            'user_id' => $this->user_id,
             'permission_type' => $this->permission_type,
             'start_date' => $this->start_date,
             'end_date' =>  $this->end_date,

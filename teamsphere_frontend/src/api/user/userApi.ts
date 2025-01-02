@@ -22,7 +22,7 @@ export const createUser = async (data: UserRequest) => {
   }
 };
 
-export const updateUser = async (id: string, data: UserRequest) => {
+export const updateUser = async (id: number, data: UserRequest) => {
   try {
     const response = await axios.put(API_URL + id , data);
     return response.data;
@@ -32,7 +32,7 @@ export const updateUser = async (id: string, data: UserRequest) => {
   }
 };
 
-export const deleteUser = async (id: string) => {
+export const deleteUser = async (id: number) => {
   try {
     const response = await axios.delete(API_URL + id);
     return response.data;
@@ -42,9 +42,9 @@ export const deleteUser = async (id: string) => {
   }
 };
 
-export const getUser = async (id: string) => {
+export const getUsers = async () => {
   try {
-    const response = await axios.get(API_URL + id);
+    const response = await axios.get(API_URL);
     return response.data;
   } catch (error) {
     console.log(error);

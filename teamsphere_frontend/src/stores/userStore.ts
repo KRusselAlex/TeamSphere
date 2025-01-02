@@ -1,146 +1,100 @@
 import { defineStore } from 'pinia';
-import { useRouter } from 'vue-router';
-import CryptoJS from 'crypto-js';
-import * as UserService from './UserService';
-
-const decryptFunction = (): string => {
-  const storedData = localStorage.getItem('encrypteduserdatacni');
-  if (storedData) {
-    const parsedData = JSON.parse(storedData);
-    const decryptedId = CryptoJS.AES.decrypt(parsedData.userId, import.meta.env.VITE_LOCAL_SECRET_KEY).toString(CryptoJS.enc.Utf8);
-    const decryptedToken = CryptoJS.AES.decrypt(parsedData.token, import.meta.env.VITE_LOCAL_SECRET_KEY).toString(CryptoJS.enc.Utf8);
-    return decryptedToken;
-  }
-  return 'assas';
-};
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  full_name: string;
-  role: number;
-  password: string;
-}
-
-interface AuthenticateUser {
-  jwt: string;
-}
-
-interface UserStoreState {
-  user: User[];
-  users: User[];
-  authenticateuser: AuthenticateUser;
-  UserInfo: any;
-  filteruser: User[];
-  loading: boolean;
-}
+import type { UserRequest } from '@/api/user/userTypes';
+import { createUser, updateUser, deleteUser, getUsers } from '@/api/user/userApi';
 
 export const useUserStore = defineStore('user', {
-  state: (): UserStoreState => ({
-    user: [],
-    users: [],
-    authenticateuser: { jwt: '' },
-    UserInfo: null,
-    filteruser: [],
+  state: () => ({
+    users: [] as UserRequest[],
+    filteruser: [] as UserRequest[],
     loading: false,
   }),
-  persist: true,
+  persist: true, // Ensure state is persisted
   actions: {
     async getOneUser(id: number) {
-      console.log('user id', id);
-      console.log('users', this.users);
-      const user = this.users.filter((user) => user.id === id);
-      if (user.length < 1) {
-        const router = useRouter();
-        router.push('/notfound');
-        return;
+      try {
+        const user = this.users.find((user) => user.id === id);
+        if (!user) {
+          return null;
+        }
+        return user;
+
+      } catch (error) {
+
+        console.log(error)
+
       }
-      console.log(user);
-      return user[0];
+
     },
 
-    async getUsers() {
-      console.log('users', this.authenticateuser.jwt);
+    async fetchUsers(): Promise<void> {
       this.loading = true;
       try {
-        const response = await UserService.getUsers(this.authenticateuser.jwt);
-        this.users = response.data.reverse();
-        this.filteruser = this.users;
+        const response = await getUsers();
+        this.users = response.data.users.reverse();
+        // this.filteruser = [...this.users];
       } catch (error) {
-        console.error('Error fetching users', error);
+        console.error('Error fetching users:', error);
       } finally {
         this.loading = false;
       }
     },
 
-    getRole(roles: number): number {
-      const entity = this.users.filter((user) => user.role === roles);
-      return entity.length;
-    },
+    // countUsersByRole(role: number): number {
+    //   return this.users.filter((user) => user.role === role ).length;
+    // },
 
-    getUserRole(roles: number): User[] {
-      if (roles === 4) {
-        this.filteruser = this.users;
-        return this.users;
-      }
-      const entity = this.users.filter((user) => user.role === roles);
-      this.filteruser = entity;
-      return entity;
-    },
+    // filterUsersByRole(role: number): UserRequest[] {
+    //   if (role === 4) {
+    //     this.filteruser = [...this.users];
+    //     return this.users;
+    //   }
+    //   this.filteruser = this.users.filter((user) => user.role === role);
+    //   return this.filteruser;
+    // },
 
-    async DeleteUser(id: number) {
+    async deleteUserById(id: number) {
       try {
-        const response = await UserService.deleteUser(id, this.authenticateuser.jwt);
+        await deleteUser(id);
+        this.users = this.users.filter((user) => user.id !== id); // Update local state
+        console.log(`User with ID ${id} deleted successfully`);
+      } catch (error) {
+        console.error(`Error deleting user with ID ${id}:`, error);
+      }
+    },
+
+    async addUser(data: UserRequest) {
+      try {
+        const response = await createUser(data);
+        this.users.push(response.data); // Update local state
+        console.log('User created successfully:', response.data);
         return response.data;
       } catch (error) {
-        console.error('Error deleting user', error);
+        console.error('Error adding user:', error);
       }
     },
 
-    hideUser(id: number) {
-      this.users = this.users.filter((user) => user.id !== id);
-      console.log(this.users);
-    },
-
-    async AddUser(name: string, email: string, full_name: string, role: number, password: string) {
-      const userData: User = { name, email, full_name, role, password };
+    async editUser(id: number, data: UserRequest) {
       try {
-        const response = await UserService.createUser(userData, this.authenticateuser.jwt);
-        console.log('User created', response.data);
+        const response = await updateUser(id, data);
+        const index = this.users.findIndex((user) => user.id === id);
+        if (index !== -1) {
+          this.users[index] = response.data; // Update local state
+        }
+        console.log('User updated successfully:', response.data);
         return response.data;
       } catch (error) {
-        console.error('Error adding user', error);
+        console.error(`Error updating user with ID ${id}:`, error);
       }
     },
 
-    createUserStore(name: string, email: string, full_name: string, role: number, password: string) {
-      this.users.unshift({ name, email, full_name, role, password });
-    },
-
-    async EditUser(id: number, name: string, email: string, full_name: string, role: number, password: string) {
-      const userData: User = { name, email, full_name, role, password };
-      try {
-        const response = await UserService.editUser(id, userData, this.authenticateuser.jwt);
-        console.log('User updated', response.data);
-        return response.data;
-      } catch (error) {
-        console.error('Error updating user', error);
-      }
-    },
-
-    filterStore(value: string): User[] {
+    filterUsers(value: string): UserRequest[] {
       this.filteruser = this.users.filter(
         (user) =>
-          user.name.toLowerCase().includes(value.toLowerCase()) ||
+          user.username.toLowerCase().includes(value.toLowerCase()) ||
           user.email.toLowerCase().includes(value.toLowerCase()) ||
-          user.full_name.toLowerCase().includes(value.toLowerCase())
+          (user.fullname || '').toLowerCase().includes(value.toLowerCase())
       );
       return this.filteruser;
-    },
-
-    authenticate(data: AuthenticateUser) {
-      this.authenticateuser = data;
     },
   },
 });

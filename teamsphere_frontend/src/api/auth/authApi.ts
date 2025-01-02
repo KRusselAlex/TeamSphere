@@ -1,12 +1,13 @@
-// authApi.ts
 
 import axios from 'axios';
+import { decryptData } from '../tokenEncryption';
 import type { LoginRequest, RegisterRequest, ForgotPasswordRequest, ResetPasswordRequest } from './authTypes';
 
 const API_URL = import.meta.env.VITE_API_URL + "/auth/";
 
 axios.defaults.withCredentials = true;
-const token = localStorage.getItem('auth_token');
+const datas: string[] | null = decryptData();
+const token = datas ? datas[0] : null;
 
 if (token) {
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;

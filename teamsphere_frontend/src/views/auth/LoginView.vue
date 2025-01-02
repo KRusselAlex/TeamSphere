@@ -4,14 +4,15 @@ import LogoImage from '@/components/LogoImage.vue';
 import PrimaryButton from '@/components/PrimaryButton.vue';
 import { loginUser } from '@/api/auth/authServices';
 import type { LoginRequest } from '@/api/auth/authTypes';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
+import { useRouter ,useRoute} from 'vue-router';
 
 interface FinaleMessage {
   email?: string;
 }
 
+
+const router = useRouter();
+const route = useRoute();
 const finaleMessage = ref<FinaleMessage>({});
 const email = ref('');
 const password = ref('');
@@ -75,8 +76,13 @@ const submitForm = async () => {
     if (response.success) {
 
       console.log("Successfully logged in");
-      const redirectTo = localStorage.getItem('redirectTo');
+      let redirectTo = route.query.redirect;
       if (redirectTo) {
+
+        if (Array.isArray(redirectTo)) {
+          // If it's an array, join the elements into a string, assuming it's query values
+          redirectTo = redirectTo.join(',');  // Or format it as needed for a path or query string
+        }
 
         localStorage.removeItem('redirectTo');
         router.push(redirectTo);
@@ -120,7 +126,7 @@ const submitForm = async () => {
       </div>
 
       <form @submit.prevent="submitForm" class="flex flex-col gap-4 lg:gap-3 w-full">
-        <p v-if="finaleMessage" class="text-red-500 text-xl font-sans">{{ finaleMessage.email }}</p>
+        <p v-if="finaleMessage" class="text-red-500 text-center md:text-start text-xl font-sans">{{ finaleMessage.email }}</p>
         <div class="flex flex-col gap-2 w-full">
           <label for="email" class="font-sans">Adresse e-mail</label>
           <input type="email" id="email" v-model="email"

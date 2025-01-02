@@ -14,7 +14,8 @@ import MarkedPresence from '@/views/dashboard/presence/MarkedPresence.vue'
 import AddUsers from '@/views/dashboard/users/AddUsers.vue'
 import AllUsers from '@/views/dashboard/users/AllUsers.vue'
 import EditUsers from '@/views/dashboard/users/EditUsers.vue'
-import { decryptData } from '@/api/tokenEncryption';  // Import the decryptData function
+import { decryptData } from '@/api/tokenEncryption';
+import ViewOnePresence from '@/views/dashboard/presence/ViewOnePresence.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,9 +29,9 @@ const router = createRouter({
       path: '/dashboard',
       children: [
         {
-          path: '', // Default child route
+          path: '',
           name: 'dashboard.home',
-          component: DashboardView, // Component to show when navigating to `/dashboard`
+          component: DashboardView,
         },
         {
           path: 'permissions',
@@ -63,6 +64,11 @@ const router = createRouter({
           component: MarkedPresence
         },
         {
+          path: 'attendances/:id',
+          name: 'attendances-one',
+          component: ViewOnePresence
+        },
+        {
           path: 'users/create',
           name: 'usere-create',
           component: AddUsers
@@ -91,40 +97,38 @@ const router = createRouter({
   ],
 })
 
-// Navigation guard to protect routes
+
 router.beforeEach((to, from, next) => {
   if (to.path.startsWith('/auth')) {
-    return next();  // No need to check auth for /auth routes
+    return next();
   }
 
-  const decryptedData = decryptData();  // Decrypt token and ID
+  const decryptedData = decryptData();
   if (decryptedData) {
     const [decryptedToken, decryptedId] = decryptedData;
 
-    // If both token and userId are valid, allow access
     if (decryptedToken && decryptedId) {
       return next();
     }
   }
 
-  // If the user is not authenticated, store the redirect route in the URL
   if (from.path !== '/auth/login') {
     console.log(to.fullPath);
     router.push({ name: 'login', query: { redirect: to.fullPath } });
   } else {
-    next({ name: 'login' });  // Redirect to login without redirect route
+    next({ name: 'login' });
   }
 });
 
-// After login, redirect to the original route or to the dashboard
+
 router.afterEach((to) => {
   if (to.name === 'login' && to.query.redirect) {
     const redirectTo = to.query.redirect as string;
     if (redirectTo) {
-      // Redirect to the stored route in the URL query
+
       router.push(redirectTo);
     } else {
-      // If no redirect URL exists, redirect to the default dashboard
+
       router.push({ name: 'dashboard.home' });
     }
   }

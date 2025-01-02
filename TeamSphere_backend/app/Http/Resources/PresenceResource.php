@@ -16,12 +16,12 @@ class PresenceResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'employee_id' => $this->user_id,
+            'user_id' => $this->user_id,
             'marked_at' => $this->created_at,
             'username' =>$this->username,
             'status' => $this->status,
             'fullname' => $this->fullname
-            
+
         ];
     }
 }

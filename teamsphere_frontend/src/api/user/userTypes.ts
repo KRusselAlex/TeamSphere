@@ -1,5 +1,6 @@
 
 export interface UserRequest {
+  id?:number;
   username:string;
   fullname?:string;
   email: string;
@@ -8,4 +9,6 @@ export interface UserRequest {
   role?:boolean;
   image?: File | string | null;
 }
+
+
 

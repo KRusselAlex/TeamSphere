@@ -3,6 +3,8 @@ import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 import LogoImage from "@/components/LogoImage.vue";
+import { decryptData } from "@/api/tokenEncryption";
+
 
 const router = useRouter();
 const route = useRoute();
@@ -13,7 +15,8 @@ const isLoading = ref(false);
 
 onMounted(async () => {
   const verificationToken = route.query.verification_url;
-  const localStorageToken = localStorage.getItem("usergestion");
+  const datas: string[] | null = decryptData();
+  const localStorageToken = datas? datas[0] : null;
 
   if (!verificationToken) {
     // Pas de token dans l'URL
@@ -74,7 +77,7 @@ onMounted(async () => {
     </RouterLink>
 
     <div class="bg-white p-8 rounded-lg shadow-lg text-center max-w-lg w-full">
-      <!-- Indicateur de chargement -->
+
       <div v-if="isLoading" class="flex flex-col items-center gap-4">
         <svg xmlns="http://www.w3.org/2000/svg" class="animate-spin w-16 h-16 text-blue-500" fill="none"
           viewBox="0 0 24 24" stroke="currentColor">

@@ -7,7 +7,7 @@ export const loginUser = async (data: LoginRequest) => {
     const response = await authApi.login(data);
     console.log(response.success);
     if(response.success){
-      console.log("bool true or false",encryptData(response.data.token,response.data.user.id));
+      console.log("bool true or false",encryptData(response.data.token,response.data.user.id,response.data.user.role));
 
     }
 

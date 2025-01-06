@@ -19,7 +19,7 @@ const validationErrors = ref<{ [key: string]: string }>({});
 const formData: PermissionRequest = reactive({
   user_id: Number(userID),
   permission_type: '',
-  justification: null as File | null,
+  justification: null ,
   reason: '',
   start_date: '',
   end_date: '',
@@ -70,8 +70,9 @@ const handleSubmit = async () => {
   }
 
 
-  const response = await permissionStore.addPermission(formData);
 
+  const response = await permissionStore.addPermission(formData);
+  console.log("la reponse",response);
   if (response) {
 
     formData.justification = null

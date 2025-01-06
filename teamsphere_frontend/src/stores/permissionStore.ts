@@ -51,6 +51,7 @@ export const usePermissionStore = defineStore('permission', {
     async addPermission(data: PermissionRequest): Promise<PermissionRequest | undefined | null> {
       try {
         const response = await createPermission(data);
+        console.log(response);
         if(response.success){
           await this.fetchPermissions();
           return response.data;

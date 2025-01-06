@@ -13,16 +13,16 @@ const userID = decryptDatas ? decryptDatas[1] : null;
 const selectedDate = ref('');
 const permissionStore = usePermissionStore();
 
-const handleStatusApprove= async(id:number) => {
+const handleStatusApprove = async (id: number) => {
 
-  const permissionUpdateData =  permissionStore.getOnePermission(id)
+  const permissionUpdateData = permissionStore.getOnePermission(id)
 
-  if(permissionUpdateData){
+  if (permissionUpdateData) {
     permissionUpdateData.status = 'approved';
     permissionUpdateData.admin_id = Number(userID);
     const response = await permissionStore.editPermission(id, permissionUpdateData)
 
-    if(response){
+    if (response) {
 
       console.log("approve success");
 
@@ -134,17 +134,18 @@ const props = defineProps<{
 
           <td class="px-6 py-4 whitespace-nowrap">
             <span :class="{
-                'bg-green-100 text-green-800': permission?.status === 'approved',
-                'bg-yellow-100 text-yellow-800': permission?.status === 'pending',
-                'bg-red-100 text-red-800': permission?.status === 'rejected',
-              }" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+              'bg-green-100 text-green-800': permission?.status === 'approved',
+              'bg-yellow-100 text-yellow-800': permission?.status === 'pending',
+              'bg-red-100 text-red-800': permission?.status === 'rejected',
+            }" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
               {{ permission?.status }}
             </span>
           </td>
 
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex justify-center items-center">
             <button class="text-indigo-600 hover:text-indigo-900"
-              @click="handleStatusApprove(permission?.id? permission.id : 0 )" v-if="permission.status == 'pending' && user?.role">
+              @click="handleStatusApprove(permission?.id ? permission.id : 0)"
+              v-if="permission.status == 'pending' && user?.role">
               <svg fill="#28A745" width="35px" height="35px" viewBox="-1.7 0 20.4 20.4"
                 xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
                 <path
@@ -152,10 +153,10 @@ const props = defineProps<{
               </svg>
             </button>
             <button class="ml-2 text-red-600 hover:text-red-900"
-              @click="handleStatusReject(permission?.id ? permission.id : 0)" v-if="permission.status == 'pending' ">
+              @click="handleStatusReject(permission?.id ? permission.id : 0)" v-if="permission.status == 'pending'">
               <svg fill=" #FF0000" width="33px" height="33px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm3.707,12.293a1,1,0,1,1-1.414,1.414L12,13.414,9.707,15.707a1,1,0,0,1-1.414-1.414L10.586,12,8.293,9.707A1,1,0,0,1,9.707,8.293L12,10.586l2.293-2.293a1,1,0,0,1,1.414,1.414L13.414,12Z" />
+                <path
+                  d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm3.707,12.293a1,1,0,1,1-1.414,1.414L12,13.414,9.707,15.707a1,1,0,0,1-1.414-1.414L10.586,12,8.293,9.707A1,1,0,0,1,9.707,8.293L12,10.586l2.293-2.293a1,1,0,0,1,1.414,1.414L13.414,12Z" />
               </svg>
             </button>
             <RouterLink :to="`/dashboard/permissions/${permission?.id}`" class="ml-2 text-red-600 hover:text-red-900">

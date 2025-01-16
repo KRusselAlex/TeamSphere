@@ -15,10 +15,22 @@ use Exception;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $user = User::Paginate(30);
+
+            $userAuth = $request->user();
+
+
+            if ($userAuth->role == 1) {
+
+                $user = User::Paginate(30);
+            } else {
+
+                $user = User::find($userAuth->id);
+
+            }
+
             if ($user->count() > 0) {
 
                 return response()->json([

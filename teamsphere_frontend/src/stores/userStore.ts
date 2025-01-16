@@ -30,7 +30,7 @@ export const useUserStore = defineStore('user', {
       this.loading = true;
       try {
         const response = await getUsers();
-        this.users = response.data.users.reverse();
+        this.users = response.data?.users?.reverse();
         // this.filteruser = [...this.users];
       } catch (error) {
         console.error('Error fetching users:', error);

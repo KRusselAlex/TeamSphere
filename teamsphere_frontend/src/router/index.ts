@@ -15,14 +15,22 @@ import AddUsers from '@/views/dashboard/users/AddUsers.vue'
 import AllUsers from '@/views/dashboard/users/AllUsers.vue'
 import EditUsers from '@/views/dashboard/users/EditUsers.vue'
 import { decryptData } from '@/api/tokenEncryption';
+import NotFound from '@/views/dashboard/NotFound.vue'
+import VerifyPage from '@/views/Verify/VerifyPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/verify',
+      name: 'verify',
+      component: VerifyPage,
+    },
+    {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      name:"home",
+      component: HomeView
+
     },
     {
       path: '/dashboard',
@@ -89,16 +97,17 @@ const router = createRouter({
         { path: 'reset-password', component: ResetPassword, name: 'reset-password' },
       ],
     },
+    { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
   ],
 })
 
 
-router.beforeEach((to, from, next) => {
-  if (to.path.startsWith('/auth')) {
+router.beforeEach(async (to, from, next) => {
+  if (to.path.startsWith('/auth') || to.path == "/") {
     return next();
   }
 
-  const decryptedData = decryptData();
+  const decryptedData = await decryptData();
   if (decryptedData) {
     const [decryptedToken, decryptedId] = decryptedData;
 

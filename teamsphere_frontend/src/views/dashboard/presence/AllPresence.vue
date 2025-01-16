@@ -8,10 +8,7 @@ import { usePresenceStore } from '@/stores/pressenceStore';
 import { onMounted } from 'vue';
 
 const presenceStore = usePresenceStore();
-
-
 const permissionStore = usePermissionStore();
-
 const userStore = useUserStore();
 
 onMounted(() => {

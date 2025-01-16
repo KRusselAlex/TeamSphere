@@ -6,7 +6,7 @@ import type { LoginRequest, RegisterRequest, ForgotPasswordRequest, ResetPasswor
 const API_URL = import.meta.env.VITE_API_URL + "/auth/";
 
 axios.defaults.withCredentials = true;
-const datas: string[] | null = decryptData();
+const datas: string[] | null = await decryptData();
 const token = datas ? datas[0] : null;
 
 if (token) {
@@ -26,7 +26,7 @@ export const login = async (data: LoginRequest) => {
 
 export const register = async (data: RegisterRequest) => {
   try {
-   
+
     const response = await axios.post(`${API_URL}register`, data);
     return response.data;
 
@@ -38,7 +38,7 @@ export const register = async (data: RegisterRequest) => {
 
 export const logout = async () => {
   try {
-    const response = await axios.post(`${API_URL}/logout`);
+    const response = await axios.post(`${API_URL}logout`);
 
     return response.data;
   } catch (error) {

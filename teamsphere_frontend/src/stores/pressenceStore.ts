@@ -31,7 +31,7 @@ export const usePresenceStore = defineStore('presence', {
       try {
         const response = await getAllPresences();
         console.log(response.data.presences);
-        this.presences = response.data.presences.reverse();
+        this.presences = response.data?.presences?.reverse();
         this.filteredPresences = [...this.presences];
       } catch (error) {
         console.error('Error fetching presences:', error);

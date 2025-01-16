@@ -6,7 +6,7 @@ import { toFormData } from '@/utils/presentUser';
 const API_URL = import.meta.env.VITE_API_URL + "/permissions";
 
 axios.defaults.withCredentials = true;
-const datas: string[] | null = decryptData();
+const datas: string[] | null =  decryptData();
 const token = datas ? datas[0] : null;
 
 

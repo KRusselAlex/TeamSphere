@@ -3,10 +3,10 @@ import { ref } from 'vue';
 import { useUserStore } from "@/stores/userStore";
 import type { PermissionRequest } from '@/api/permission/permissionsTypes';
 
-export const PresentUser = () => {
+export const PresentUser = async () => {
 
   const userStore = useUserStore();
-  const decryptDatas = decryptData();
+  const decryptDatas = await decryptData();
   const userID = decryptDatas ? decryptDatas[1] : null;
   const userPresent = ref(userStore.getOneUser(Number(userID)));
   return userPresent

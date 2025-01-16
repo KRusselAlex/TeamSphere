@@ -30,13 +30,29 @@ import DataTablePermission from '@/components/permissionsComponents/DataTablePer
 import {usePermissionStore} from "@/stores/permissionStore"
 import { useUserStore } from '@/stores/userStore';
 import { usePresenceStore } from '@/stores/pressenceStore';
-const presenceStore = usePresenceStore();
-presenceStore.fetchPresences()
+import {onMounted} from 'vue';
 
+const presenceStore = usePresenceStore();
 const permissionStore = usePermissionStore();
-permissionStore.fetchPermissions();
 const userStore = useUserStore();
-userStore.fetchUsers();
+
+
+onMounted(() => {
+  if (userStore.users.length === 0) {
+    userStore.fetchUsers();
+  }
+
+   if (presenceStore.presences.length === 0) {
+    presenceStore.fetchPresences()
+  }
+
+    if (permissionStore.permissions.length === 0) {
+    permissionStore.fetchPermissions();
+  }
+
+});
+
+
 
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend);

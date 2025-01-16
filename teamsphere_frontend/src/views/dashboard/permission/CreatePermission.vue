@@ -69,10 +69,8 @@ const handleSubmit = async () => {
     return;
   }
 
-
-
   const response = await permissionStore.addPermission(formData);
-  console.log("la reponse",response);
+
   if (response) {
 
     formData.justification = null

@@ -6,6 +6,7 @@ import { loginUser } from '@/api/auth/authServices';
 import type { LoginRequest } from '@/api/auth/authTypes';
 import { useRouter ,useRoute} from 'vue-router';
 
+
 interface FinaleMessage {
   email?: string;
 }
@@ -88,11 +89,12 @@ const submitForm = async () => {
         router.push(redirectTo);
       } else {
 
-        router.push({ name: 'attendances' });
+
+        router.push({ name: 'home' })
       }
     } else {
-      finaleMessage.value = response.response.data.errors;
-      if (response.response.data.errors?.email?.[0]) {
+      finaleMessage.value = response.response?.data?.errors;
+      if (response.response?.data?.errors?.email?.[0]) {
         finaleMessage.value.email = "Les indentifiants sont erronés."
       }
 

@@ -1,19 +1,23 @@
 <script setup lang="ts">
 import LogoImage from './LogoImage.vue';
-import { PresentUser } from '@/utils/presentUser';
-import { ref } from 'vue';
 import { logoutUser } from '@/api/auth/authServices';
 import { useRouter } from 'vue-router';
-
+import { decryptData } from '@/api/tokenEncryption';
+import { ref } from 'vue';
 
 const router = useRouter();
-const user = ref(PresentUser());
+const decryptDatas = decryptData();
+const userRole = decryptDatas ? decryptDatas[2] : null;
 const widthSide = ref("18rem");
 const displaySide = ref("flex");
 const itemsAlign = ref('start')
 const show = ref(true);
 
 
+
+
+
+console.log("au depart", userRole);
 const mobileNavbar = () => {
 
   widthSide.value = "4rem"
@@ -41,7 +45,7 @@ const handleLogout = async () =>{
 </script>
 
 <template>
-  <div :style="{ width: widthSide }" class=" flex flex-col gap-3 bg-white pt-8 px-3  md:px-6">
+  <div :style="{ width: widthSide }" class=" flex flex-col gap-3 bg-white pt-8 px-6">
     <div class=" flex items-center gap-2 justify-between ">
       <RouterLink to="/" class="flex items-center gap-2 font-medium  font-sans">
         <LogoImage size="30" color="#ff7a21" />
@@ -69,7 +73,7 @@ const handleLogout = async () =>{
       <div>
         <h3 :style="{ display: displaySide }" class="text-gray-500 font-sans">Menu</h3>
         <ul :style="{ 'align-items': itemsAlign }" class="flex flex-col font-serif justify-center w-full gap-y-3 py-3 ">
-          <li class="w-full" v-if="user?.role">
+          <li class="w-full" >
             <RouterLink to="/dashboard"
               class="px-4 py-2 text-gray-900 flex flex-row items-center w-full gap-4  border-gray-300   md:hover:bg-[#fff7ed] hover:font-bold   hover:text-primaryColor bg-opacity-70  rounded-inputRadius">
               <span>
@@ -123,29 +127,9 @@ const handleLogout = async () =>{
 
         </ul>
       </div>
-      <div v-if="user?.role">
+      <div v-if="userRole">
         <h3 :style="{ display: displaySide }" class="text-gray-500 font-sans">Admin</h3>
         <ul :style="{ 'align-items': itemsAlign }" class="flex flex-col font-serif justify-center w-full gap-y-3 py-3 ">
-
-
-          <li class="w-full">
-            <RouterLink :to="{ name: 'permissions.viewAll' }"
-              class="px-4 py-2 text-gray-900 flex flex-row items-center w-full gap-4  border-gray-300   md:hover:bg-[#fff7ed] hover:font-bold   hover:text-primaryColor bg-opacity-70  rounded-inputRadius">
-              <span>
-                <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 16 16" id="request-sent-16px"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path id="Path_50" data-name="Path 50"
-                    d="M-11.5,0h-11A2.5,2.5,0,0,0-25,2.5v8A2.5,2.5,0,0,0-22.5,13h.5v2.5a.5.5,0,0,0,.309.462A.489.489,0,0,0-21.5,16a.5.5,0,0,0,.354-.146L-18.293,13H-11.5A2.5,2.5,0,0,0-9,10.5v-8A2.5,2.5,0,0,0-11.5,0ZM-10,10.5A1.5,1.5,0,0,1-11.5,12h-7a.5.5,0,0,0-.354.146L-21,14.293V12.5a.5.5,0,0,0-.5-.5h-1A1.5,1.5,0,0,1-24,10.5v-8A1.5,1.5,0,0,1-22.5,1h11A1.5,1.5,0,0,1-10,2.5Zm-2.038-3.809a.518.518,0,0,1-.109.163l-2,2A.5.5,0,0,1-14.5,9a.5.5,0,0,1-.354-.146.5.5,0,0,1,0-.708L-13.707,7H-18.5A1.5,1.5,0,0,0-20,8.5a.5.5,0,0,1-.5.5.5.5,0,0,1-.5-.5A2.5,2.5,0,0,1-18.5,6h4.793l-1.147-1.146a.5.5,0,0,1,0-.708.5.5,0,0,1,.708,0l2,2a.518.518,0,0,1,.109.163A.505.505,0,0,1-12.038,6.691Z"
-                    transform="translate(25)" />
-                </svg>
-
-
-
-              </span>
-
-              <span :style="{ display: displaySide }">Permissions</span>
-            </RouterLink>
-          </li>
           <li class="w-full">
             <RouterLink to="/dashboard/users/view"
               class="px-4 py-2 text-gray-900 flex flex-row items-center w-full gap-4  border-gray-300   md:hover:bg-[#fff7ed] hover:font-bold   hover:text-primaryColor bg-opacity-70  rounded-inputRadius">

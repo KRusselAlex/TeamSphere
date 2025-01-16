@@ -58,7 +58,7 @@ import PrimaryButton from '@/components/PrimaryButton.vue';
         <div class="grid  mt-2 md:mt-5 ">
           <div class="grid md:grid-cols-2 gap-4 items-center   w-full">
 
-            <PrimaryButton css="bg-primaryColor px-3 py-3  font-bold text-xl " title="Réinitialiser" />
+            <PrimaryButton css="bg-primaryColor px-3 py-3  font-bold text-xl " title="Réinitialiser" type="submit" />
 
 
 

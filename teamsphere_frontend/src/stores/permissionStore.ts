@@ -29,7 +29,7 @@ export const usePermissionStore = defineStore('permission', {
       this.loading = true;
       try {
         const response = await getAllPermissions();
-        this.permissions = response.data.permissions.reverse(); // Populate permissions
+        this.permissions = response.data?.permissions?.reverse(); // Populate permissions
         this.filteredPermissions = [...this.permissions]; // Initialize filtered permissions
       } catch (error) {
         console.error('Error fetching permissions:', error);

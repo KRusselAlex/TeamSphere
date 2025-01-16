@@ -12,7 +12,7 @@ const props = defineProps<ButtonProps>();
 </script>
 
 <template>
-  <button :class="`rounded-full font-sans text-white ${props.css}`" :type="props.type">
+  <button :class="`rounded-full font-sans text-white  ${props.css}`" :type="props.type">
     {{ props.title }}
   </button>
 </template>
